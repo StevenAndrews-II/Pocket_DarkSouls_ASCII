@@ -1,0 +1,263 @@
+﻿using PocketDarkSouls;
+using System;
+using System.Collections.Generic;
+
+public class CharacterCreator
+{
+
+    List<string> maleMinerNames = new List<string>
+{
+    "Thorin", "Doran", "Thrain", "Oin", "Bofur", "Dain", "Koth", "Sindri", "Fafnir", "Mimir",
+    "Nordri", "Grendel", "Sigurd", "Odin", "Forseti", "Fenris", "Magne", "Moin", "Skuld", "Urd",
+    "Bael", "Hagen", "Balin", "Ori", "Bombur", "Nain", "Magni", "Alvis", "Otur", "Galar",
+    "Sudri", "Beowulf", "Hagred", "Vidar", "Njord", "Surtr", "Svafnir", "Graf", "Verd", "Mani",
+    "Krag", "Vorn", "Gloin", "Dori", "Fili", "Modi", "Onar", "Hreid", "Fjalar", "Gandalf",
+    "Vali", "Freyr", "Ofnir", "Grabak", "Vid", "Ur", "Ver", "Mani", "Gorm", "Durin",
+    "Nori", "Kili", "Ryser", "Brokk", "Ivaldi", "Austri", "Gram", "Unferth", "Hermod", "Ymir",
+    "Ulf", "Bram", "Fundin", "Bifur", "Dwalin", "Dax", "Eitri", "Regin", "Alberic", "Vestri",
+    "Thror", "Hrothgar", "Tyr", "Hodur", "Baldur", "Thrud", "Goin", "Sol", "Kael", "Regin","Hagard"
+};
+
+    List<string> femaleMinerNames = new List<string>
+{
+    "Thora", "Lyra", "Freya", "Gerda", "Fulla", "Lofn", "Beyla", "Day", "Bestla", "Signy",
+    "Hild", "Rota", "Skogul", "Mist", "Atla", "Jarn", "Fenja", "Heid", "Laufey", "Nal",
+    "Sigrid", "Petra", "Idunn", "Ran", "Saga", "Var", "Bil", "Earth", "Borghild", "Sigrun",
+    "Gondul", "Radgrid", "Herja", "Angeyja", "Greip", "Menja", "Rind", "Farbauti", "Vesper", "Etta",
+    "Sif", "Hel", "Eir", "Vor", "Sol", "Jord", "Brynhild", "Svava", "Skogul", "Goll",
+    "Eistla", "Gjalp", "Hyndla", "Skadi", "Baugi", "Helga", "Juno", "Frigg", "Nanna", "Hlin",
+    "Syn", "Mani", "Rind", "Gudrun", "Olrun", "Hlokk", "Urd", "Alvitr", "Eyrgjafa", "Gerd",
+    "Mara", "Zora", "Skadi", "Gefjun", "Gna", "Snotra", "Night", "Gunnlod", "Kriemhild", "Hervor",
+    "Mist", "Verdandi", "Kara", "Grimhild", "Imd", "Bestla", "Gullveig", "Grid", "Hrim", "Suttung"
+
+};
+
+    List<string> minerLastNames = new List<string>
+{
+    "Aethros", "Vornhal", "Draeven", "Kaelith", "Morvain", "Tharros", "Velkyn", "Zereth", "Orvane", "Nyxar",
+    "Helior", "Vaelun", "Rathen", "Solvyr", "Mythren", "Auron", "Valeth", "Dravyn", "Karneth", "Zorvain",
+    "Eldros", "Thyrian", "Varkul", "Orren", "Maleth", "Caedryn", "Vorun", "Nerath", "Zareth", "Ulthar",
+    "Baelros", "Virel", "Thalor", "Morren", "Avarn", "Kelvyr", "Dorneth", "Yorath", "Vaelor", "Orthex",
+    "Zevran", "Karthos", "Velor", "Nyreth", "Arveth", "Droven", "Malrith", "Thorne", "Voss", "Graven",
+    "Harrow", "Duskryn", "Veylor", "Ashryn", "Morveth", "Krevos", "Zalthor", "Orvain", "Velmorn", "Threx",
+    "Drathen", "Vaul", "Korveth", "Nyros", "Zerath", "Aldren", "Vorath", "Kelros", "Thyros", "Moros",
+    "Varn", "Eryndor", "Ulric", "Draeth", "Kaelor", "Vireth", "Zorin", "Malvor", "Ordrin", "Thalryn",
+    "Vaelros", "Krynn", "Zerros", "Morvain", "Aethryn", "Velros", "Draemor", "Nyvar", "Korren", "Zalthyn"
+
+};
+
+
+    private int idcount                             = 0;
+    private Dictionary<string, Player> players      = new Dictionary<string, Player>();
+    private Random rand                             = new Random();
+    private DialogCreator dialogCreator             = new DialogCreator();
+    private readonly ItemCreator itemCreator;
+    public CharacterCreator(ItemCreator itemCreator)
+    {
+        this.itemCreator = itemCreator;
+    }
+
+
+
+
+
+    // on each revolution of the parser, this updates all players/NPCs in the game 
+    public void update()
+    {
+        foreach (var (k,v) in players)
+        {
+            v.update();
+        }
+    }
+
+
+
+
+ 
+
+
+    public Player createRandomPerson(string? name = null, string? type = "user") // this is about 9,801(x2) per gender /  19,602 total combinations  99x99
+    {
+
+        // name generator - loops until met
+        int counter = 0;
+        while (name == null)
+        {
+            counter++; // timeout counter
+            idcount++; // index of all players 
+            List<string> selected_gender;
+            int gender = rand.Next(0, 1);
+            int name_roll;
+            int lastName_roll;
+
+            if (gender == 0)
+            {
+                selected_gender = maleMinerNames;
+                name_roll = rand.Next(0, maleMinerNames.Count);
+            }
+            else
+            {
+                selected_gender = femaleMinerNames;
+                name_roll = rand.Next(0, femaleMinerNames.Count);
+            }
+            lastName_roll = rand.Next(0, minerLastNames.Count);
+            string temp_name = $"{selected_gender[name_roll]}_{minerLastNames[lastName_roll]}";
+            if (!players.ContainsKey(temp_name))
+            {
+                name = temp_name;
+                continue;
+            }
+            else
+            {
+                if (counter > 5) // time out for generator
+                {
+                    name = $"{temp_name}_{idcount}";
+                    break;
+                }
+            }
+        }
+
+
+        // DI inject health system,and other systems here 
+
+        
+        Wallet wallet                   = new Wallet(600, 100000);
+        HealthSystem health             = new HealthSystem();
+
+        Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
+
+
+        // bind user only commands
+        List<Speak>  dialogCommands = dialogCreator.MakeDialogSet(type);
+        List<ICs> inventoryCommands = new List<ICs>();    // hook into commands for inventory - would need to be on all players if we can body swap ??  this gies you fron end acess to that characts inventory
+
+        inventoryCommands.Add(new InventoryOpen());
+        inventoryCommands.Add(new InventoryEquip());      // really only needs to load for user 
+        inventoryCommands.Add(new InventoryUnequip());    // AI should really just have acess withouth the command interfece 
+        inventoryCommands.Add(new InventoryUse());
+
+
+        Player character;
+        switch (type)
+        {
+            // only one of these per fame ( is the user )
+            // this allows for some advanced character to character interactiosn
+            case "hero":
+
+                character = new Hero(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                Loot(character);
+                break;
+                
+
+            case "merchant":
+
+               character = new Merchant(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                Loot(character);
+                break;
+            case "beggar":
+                character = new Beggar(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                break;
+            case "drunk":
+                character = new Drunk(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                break;
+            case "person":
+                character = new Person(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                Loot(character);
+                break;
+            default:
+                character = new Person(
+                                                       name,               // Character name
+                                                       dialogCommands,     // custom dialog prompt hooking 
+                                                       main_inventory,     // internal system 
+                                                       inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                       wallet,             // internal system 
+                                                       health,             // internal system
+
+                                                       null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                    );
+                break;
+        }
+
+       
+        
+        players.Add(name, character); // spawn after creation 
+        return character;
+    }
+
+    private void Loot(Player p)
+    {
+        int numberOf_roll   = rand.Next(0, 5);
+        int type_roll       = 0;
+        Item _;
+        for (int i = 0; i < numberOf_roll; i++)
+        {
+
+            type_roll = rand.Next(0, 4);
+            switch (type_roll)
+            {
+                case 0:
+                    _ = itemCreator.Generate("sword");
+                    p.main_inventory.AddItem(_);
+                    break;
+                case 1:
+                    _ = itemCreator.Generate("helmet");
+                    p.main_inventory.AddItem(_);
+                    break;
+                case 2:
+                    _ = itemCreator.Generate("chestplate");
+                    p.main_inventory.AddItem(_);
+                    break;
+                case 3:
+                    _ = itemCreator.Generate("HP");
+                    p.main_inventory.AddItem(_);
+                    break;
+            }
+        }
+    }
+
+}
