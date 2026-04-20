@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/26894487/README.md)
 # 🗡️ Pocket Souls — ASCII Roguelike Engine
 
 A fully procedural, ASCII-based RPG inspired by Dark Souls mechanics, developed as part of a CSU Senior Software Design project.
