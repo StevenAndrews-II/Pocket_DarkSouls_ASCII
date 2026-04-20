@@ -77,20 +77,24 @@ Built from the ground up, this project functions not just as a game, but as a **
 
 ---
 
-<img width="786" height="555" alt="Screenshot 2026-04-20 063827" src="https://github.com/user-attachments/assets/e9d2da42-7d38-41f4-8977-d06db36f31a4" />
+<img width="786" height="555" alt="Screenshot 2026-04-20 063827" src="https://github.com/user-attachments/assets/a0c0ee6a-2b14-424a-acb5-788bb7f83eae" />
+
 
 ---
 
-<img width="750" height="650" alt="Screenshot 2026-04-20 063828" src="https://github.com/user-attachments/assets/10bed739-b405-4df0-a6fd-4abeab0c7c37" />
+<img width="750" height="650" alt="Screenshot 2026-04-20 063828" src="https://github.com/user-attachments/assets/040379c0-6095-4b7a-ae20-636b15957da8" />
+
 
 ---
 
 
-<img width="771" height="220" alt="Screenshot 2026-04-20 063737" src="https://github.com/user-attachments/assets/8fab8572-70d3-4210-af64-b93b67169d55" />
+<img width="771" height="220" alt="Screenshot 2026-04-20 063737" src="https://github.com/user-attachments/assets/fc66f435-22f6-4bcc-9a87-b088822d38a6" />
+
 
 ---
 
-<img width="692" height="402" alt="Screenshot 2026-04-20 063503" src="https://github.com/user-attachments/assets/3f8f68e3-0a4d-4791-8aac-667ad1ec1813" />
+<img width="692" height="402" alt="Screenshot 2026-04-20 063503" src="https://github.com/user-attachments/assets/8b78edff-d9ab-4edc-9382-9dace083c741" />
+
 
 ---
 
