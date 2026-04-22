@@ -48,7 +48,7 @@ public class Merchant : Player
 
         if (forsale.Count == 0)
         {
-            main_inventory.FindAndMarkItemsToSell(5,dice.Next(1,10));
+            main_inventory.FindAndMarkItemsToSell(2,dice.Next(5,10));
         }
     }
 

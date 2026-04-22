@@ -20,7 +20,7 @@ public class Person : Player
     Random dice = new Random();
     List<string> dir_ = new List<string>()
     {
-        "east","west","north","south"
+        "east","west","north","south" // characts stay on their floor and cant traverse (up and down)
     };
 
 

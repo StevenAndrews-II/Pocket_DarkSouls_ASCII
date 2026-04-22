@@ -3,8 +3,6 @@
 public class HealingPotion : Potion
 {
 
-
-
     public HealingPotion(string id, int numberOf, double mass, double price, int healing)
     {
         base.id         = id;
@@ -14,11 +12,10 @@ public class HealingPotion : Potion
         base.healing    = healing;
     }
 
-
     public override void Hook(HealthSystem HP, int amt)
     {
         if (HP.isAlive()){
-            HP.reginerate(amt);
+            HP.reginerate(amt*this.healing);
         }
     }
     public override string ToString()

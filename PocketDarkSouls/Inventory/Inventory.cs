@@ -44,6 +44,13 @@ public class Inventory : IInventory
     private readonly Wallet wallet;
     private readonly HealthSystem HP;
 
+    // ake this today
+    private struct inject {
+        Wallet wallet;
+        HealthSystem HP;
+    }
+
+
     public Inventory(Wallet wallet,HealthSystem HP,double backpack_cap = 75 ,double equipment_cap = 25,double armor_cap = 25)
     {
         this.wallet         = wallet;
@@ -94,9 +101,15 @@ public class Inventory : IInventory
     }
 
 
+
+
     //-------------------------------------------------------------------------------------------------------
     // Equipment attachment
     //-------------------------------------------------------------------------------------------------------
+
+
+
+
 
     Dictionary<string, bool> sections = new Dictionary<string, bool>
     {
@@ -104,14 +117,11 @@ public class Inventory : IInventory
         ["body"]    = false,
     };
 
-
     public bool Equip(string id)
     {
-
-
         if (backpack.ContainsKey(id))
         {
-            if (backpack[id] is Weapon )
+            if (backpack[id] is Weapon ) // any number of weapons can be equiped / weight based
             {
                 if (!equipment.ContainsKey(backpack[id].id))
                 { 
@@ -125,7 +135,7 @@ public class Inventory : IInventory
                 }
             }
 
-            if (backpack[id] is Helmet && sections["head"] == false)
+            if (backpack[id] is Helmet && sections["head"] == false)     // slot 1
             {
                 if (!armor.ContainsKey(backpack[id].id))
                 {
@@ -133,6 +143,7 @@ public class Inventory : IInventory
                     {
                         armor_lbs += backpack[id].mass;
                         armor.Add(id, backpack[id]);
+                        //HP.UpdateDefenseStats();
                         DelItem(id, 1);
                         sections["head"] = true;
                         return true;
@@ -140,7 +151,7 @@ public class Inventory : IInventory
                 }
             }
 
-            if (backpack[id] is ChestPlate && sections["body"] == false)
+            if (backpack[id] is ChestPlate && sections["body"] == false)  // slot 2 
             {
                 if (!armor.ContainsKey(backpack[id].id))
                 {
@@ -154,9 +165,6 @@ public class Inventory : IInventory
                     }
                 }
             }
-
-
-
         }
         return false;
     }
@@ -184,6 +192,7 @@ public class Inventory : IInventory
             if (armor[id] is ChestPlate && sections["body"] == true)
             {
                 sections["body"] = false;
+
             }
 
             armor_lbs -= armor[id].mass;
@@ -261,7 +270,9 @@ public class Inventory : IInventory
         }
     }
 
-
+    //-------------------------------------------------------------------------------------------------------
+    // Locate
+    //-------------------------------------------------------------------------------------------------------
 
     public void FindAndMarkItemsToSell(int amt, int numberOf) 
     {
@@ -303,7 +314,7 @@ public class Inventory : IInventory
     {
         if (backpack.ContainsKey(id))
         {
-            return $"Number of [ {id} : {backpack[id].numberOf} ] availible...";
+            return backpack[id].ToString();
         }
         return null;
     }
@@ -410,7 +421,6 @@ public class Inventory : IInventory
                 tmp += "[ Armor ]---------------------------------------------------------------------\n";
                 foreach (Armor item in armor.Values)
                 {
-                    //Console.WriteLine($"{i - 3} : {forsale[i].id,-35}  >>  {forsale[i].mass,8:F2} | {forsale[i].price,10:F2}", ConsoleColor.White);
                     tmp +=
                             $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
                             $"{"",-45}PHY: {item.physical_protection,5} | FIR: {item.fire_protection,5} | MGK: {item.magic_protection,5}\n";

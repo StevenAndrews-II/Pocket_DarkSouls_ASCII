@@ -16,6 +16,16 @@ public class Axe : Weapon
         base.effective_range = range;
 
     }
+
+    public override void Hook(HealthSystem HP)
+    {
+        // add effects 
+        // hook into HP
+        // maybe switch to event manager here tho
+        // use enemy event manager then send it a hit packet 
+    }
+
+
     public override string ToString()
     {
         string price = $"{this.id,-30} >> " +

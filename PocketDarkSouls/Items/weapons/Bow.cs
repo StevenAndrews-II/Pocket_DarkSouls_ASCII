@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
+﻿
 public class Bow : Weapon
 {
 
@@ -19,6 +16,17 @@ public class Bow : Weapon
         base.effective_range    = range;
 
     }
+
+
+    public override void Hook(HealthSystem HP)
+    {
+        // add effects 
+        // hook into HP
+        // maybe switch to event manager here tho
+        // use enemy event manager then send it a hit packet 
+    }
+
+
     public override string ToString()
     {
         string price = $"{this.id,-30} >> " +

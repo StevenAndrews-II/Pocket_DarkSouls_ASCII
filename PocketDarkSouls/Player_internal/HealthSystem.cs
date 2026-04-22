@@ -5,7 +5,19 @@ public class HealthSystem
 {
     private int maxHealth               = 100;
 	private int health_ammount          = 100;
+
+
+    
+    private int fire_defense            = 0; // updated from inventory equiped slots 
+    private int physical_defense        = 0;
+    private int magic_defense           = 0;
+
+
+
     private int lives_ammount           = 2;
+
+
+
 
     private bool bleed_effect           = false;    // bleed effects - bleed out over time    // room or action event 
     private int bleed_effect_time       = 0;
@@ -22,7 +34,12 @@ public class HealthSystem
 	{
 	}
 
-
+    public void  UpdateDefenseStats(int p_,int f_,int m_) // hmmmm......... major dumb problem
+    {
+        physical_defense    = p_;
+        fire_defense        = f_;
+        magic_defense       = m_;
+    }
 
 
     public void update()
