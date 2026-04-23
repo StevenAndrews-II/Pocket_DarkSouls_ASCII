@@ -18,7 +18,7 @@ namespace PocketDarkSouls
         {
             
             
-            int count_ = player.CurrentRoom.GetOccupancyCount(); // defently a hack lol
+            int count_ = player.CurrentRoom.GetOccupancyCount(); 
             if (count_ < 2){
                 player.messenger.InfoMessage("Talking to yourself is a sure sign of madness, these caverns are listening...", ConsoleColor.Yellow);
             }
@@ -27,8 +27,6 @@ namespace PocketDarkSouls
 
             if (this.HasSecondWord())
             {
-                // push to exicute here and - push third word down 
-                // this is the speak sub command ( trade, to, and fight ) 
                 if (this.HasThirdWord())
                 {
                     Player p2 = player.CurrentRoom.FindPlayerInRoom(this.ThirdWord);
@@ -36,12 +34,12 @@ namespace PocketDarkSouls
                     {
                         if (p2.SpeakCommands.ContainsKey(this.SecondWord))
                         {
-                            
+                            // execute the speak command for the NPC - hook up the speak command to the NPC and execute it here
                             p2.SpeakCommands[this.SecondWord].Execute(player,p2);
                         }
                         else
                         {
-                            player.messenger.WarningMessage("\nI shouldnt bother asking them.. ", ConsoleColor.Yellow);
+                            player.messenger.WarningMessage("\nI shouldnt bother them.. ", ConsoleColor.Yellow);
                         }
                     }
                 }
