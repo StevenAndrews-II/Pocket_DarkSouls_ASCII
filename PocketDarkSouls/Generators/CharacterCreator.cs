@@ -239,33 +239,38 @@ public class CharacterCreator
     {
         int numberOf_roll   = rand.Next(0, 5);
         int type_roll       = 0;
-        Item _;
+        Item? _;
 
         for (int i = 0; i < numberOf_roll; i++)
         {
-
             type_roll = rand.Next(0, 4);
+            string type = "";
             switch (type_roll)
             {
                 case 0:
-                    _ = itemCreator.Generate("sword");
-                    p.main_inventory.AddItem(_);
+                    type = "sword";
+                    
                     break;
                 case 1:
-                    _ = itemCreator.Generate("helmet");
-                    p.main_inventory.AddItem(_);
+                    type = "helmet";
                     break;
                 case 2:
-                    _ = itemCreator.Generate("chestplate");
-                    p.main_inventory.AddItem(_);
+                    type = "chestplate";
                     break;
                 case 3:
-                    _ = itemCreator.Generate("HP");
-                    p.main_inventory.AddItem(_);
+                    type = "HP";
+                    break;
+                default: 
+                    type = "sword";
                     break;
             }
+
+            _ = itemCreator.Generate(type);
+            if (_!=null) {
+                p.main_inventory.AddItem(_);
+            }
         }
-        p.main_inventory.random_equip();
+        p.main_inventory.RandomEquip();
     }
 
 }

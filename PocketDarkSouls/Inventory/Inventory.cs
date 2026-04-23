@@ -1,15 +1,21 @@
 ﻿using PocketDarkSouls;
 using System;
 
-public class Inventory : IInventory
+public class Inventory 
 {
 
-    private Dictionary<string, Item> backpack = new Dictionary<string, Item>();   
-    private Dictionary<string, Item> equipment = new Dictionary<string, Item>();
-    private Dictionary<string, Item> armor = new Dictionary<string, Item>();
-    private Dictionary<string, Item> forSale = new Dictionary<string, Item>();  // get rid of flag in weapon 
+    private Dictionary<string, Item> backpack   = new Dictionary<string, Item>();    // full inventory  
+    private Dictionary<string, Item> equipment  = new Dictionary<string, Item>();    // equipment slots - weight based
+    private Dictionary<string, Item> armor      = new Dictionary<string, Item>();    // armor slots - slot based
+    private Dictionary<string, Item> forSale    = new Dictionary<string, Item>();    // items marked for sale - weight based
 
-    private int Capacity                = 20;      // capacity cap
+    Dictionary<string, bool> sections = new Dictionary<string, bool>                 // section slots for armor
+    {
+        ["head"] = false,
+        ["body"] = false,
+    };
+
+    private int Capacity                = 20;       // capacity cap
     private int Capacity_onboard        = 0;
 
 
@@ -41,14 +47,9 @@ public class Inventory : IInventory
     private const double LIMIT_equipment    = 70;
 
 
-    private readonly Wallet wallet;
-    private readonly HealthSystem HP;
+    private readonly Wallet         wallet;
+    private readonly HealthSystem   HP;
 
-    // ake this today
-    private struct inject {
-        Wallet wallet;
-        HealthSystem HP;
-    }
 
 
     public Inventory(Wallet wallet,HealthSystem HP,double backpack_cap = 75 ,double equipment_cap = 25,double armor_cap = 25)
@@ -108,31 +109,30 @@ public class Inventory : IInventory
     //-------------------------------------------------------------------------------------------------------
 
 
-
-    public void random_equip()
+    /// <summary>
+    /// Randomly equips items from the backpack to the appropriate equipment or armor slots based on their types.
+    /// </summary>
+    public void RandomEquip()
     {
         foreach (var (k, v) in backpack)
         {
             if (v is Weapon || v is Helmet || v is ChestPlate)
             {
                 Equip(k);
+                continue;
             }
         }
     }
-
-
-
-    Dictionary<string, bool> sections = new Dictionary<string, bool>
-    {
-        ["head"]    = false,
-        ["body"]    = false,
-    };
-
+    /// <summary>
+    /// Equips an item from the backpack to the appropriate equipment or armor slot based on the specified item ID.
+    /// </summary>
+    /// <param name="id">The ID of the item to equip.</param>
+    /// <returns>True if the item was successfully equipped; otherwise, false.</returns>
     public bool Equip(string id)
     {
         if (backpack.ContainsKey(id))
         {
-            if (backpack[id] is Weapon ) // any number of weapons can be equiped / weight based
+            if (backpack[id] is Weapon ) // any number of weapons can be equiped / weight based - select when fighting 
             {
                 if (!equipment.ContainsKey(backpack[id].id))
                 { 
@@ -154,7 +154,6 @@ public class Inventory : IInventory
                     {
                         armor_lbs += backpack[id].mass;
                         armor.Add(id, backpack[id]);
-                        //HP.UpdateDefenseStats();
                         DelItem(id, 1);
                         sections["head"] = true;
                         return true;
@@ -180,7 +179,12 @@ public class Inventory : IInventory
         return false;
     }
 
-
+    /// <summary>
+    /// Unequips an item from the equipment or armor slots based on the specified item ID.
+    /// This method checks if the specified item ID exists in either the equipment or armor dictionaries.
+    /// </summary>
+    /// <param name="id">The ID of the item to unequip.</param>
+    /// <returns>True if the item was successfully unequipped; otherwise, false.</returns>
     public bool Unequip(string id)
     {
         if (equipment.ContainsKey(id))
@@ -194,8 +198,6 @@ public class Inventory : IInventory
         }
         if (armor.ContainsKey(id))
         {
-
-            
             if (armor[id] is Helmet && sections["head"] == true)
             {
                 sections["head"] = false;
@@ -203,7 +205,6 @@ public class Inventory : IInventory
             if (armor[id] is ChestPlate && sections["body"] == true)
             {
                 sections["body"] = false;
-
             }
 
             armor_lbs -= armor[id].mass;
@@ -211,7 +212,6 @@ public class Inventory : IInventory
             armor.Remove(id);
             AddItem(tmp);
             return true;
-
         }
         return false;
     }
@@ -220,12 +220,20 @@ public class Inventory : IInventory
     //-------------------------------------------------------------------------------------------------------
     // Sell, trade, use items 
     //-------------------------------------------------------------------------------------------------------
-
+    /// <summary>
+    /// Gets the total weight of all items in the inventory, including the backpack, equipment, armor, and items marked for sale.
+    /// </summary>
+    /// <returns>The total weight of all items in the inventory.</returns>
     public double getTotalWeight()
     {
         return backpack_lbs + equipment_lbs + armor_lbs + forSale_lbs;
     }
 
+    /// <summary>
+    /// Gets a list of all items currently marked for sale in the inventory.
+    /// This method iterates through the forSale dictionary and collects all the items into a list, which is then returned to the caller.
+    /// </summary>
+    /// <returns>A list of items currently marked for sale.</returns>
     public List<Item> getAllItemsMarkedForSale()
     {
         List<Item> __ = new List<Item>();
@@ -236,7 +244,12 @@ public class Inventory : IInventory
        return __;
     }
 
-
+    /// <summary>
+    /// Adds a specified amount of an item to the for sale bag based on the item ID and the amount to mark for sale.
+    /// This method checks if the specified item ID exists in the backpack
+    /// </summary>
+    /// <param name="id">The ID of the item to add to the for sale bag.</param>
+    /// <param name="amt">The amount of the item to add to the for sale bag.</param>
     public void AddItemToForSale(string id, int amt)
     {
         int amt_ = Math.Abs(amt); // user guard
@@ -261,17 +274,17 @@ public class Inventory : IInventory
                     backpack.Remove(id);
                 }
             }
-            // not in athe bag 
+            // not in the bag 
             else
             {
-                // add to the bag and set the inital amount for the bag 
+                // add item to the bag and set the inital amount for the bag 
                 if (backpack[id].numberOf > amt_)
                 {
                     forSale.Add(id, backpack[id]);
                     forSale[id].numberOf    = amt;
                     forSale_lbs             = forSale[id].numberOf * forSale[id].mass;// update mass
                 }
-                else // remove entirely and dirently plug it into the bag 
+                else // remove entirely and directly plug it into the bag 
                 {
                     forSale.Add(id, backpack[id]);
                     backpack.Remove(id);
@@ -284,7 +297,11 @@ public class Inventory : IInventory
     //-------------------------------------------------------------------------------------------------------
     // Locate
     //-------------------------------------------------------------------------------------------------------
-
+    /// <summary>
+    /// finds and marks a specified amount of items to sell based on the specified item ID and the number of items to mark for sale.
+    /// </summary>
+    /// <param name="amt"></param>
+    /// <param name="numberOf"></param>
     public void FindAndMarkItemsToSell(int amt, int numberOf) 
     {
         int count = 0;
@@ -301,6 +318,12 @@ public class Inventory : IInventory
         }
     }
 
+    /// <summary>
+    /// gets an item from the for sale bag based on the specified item ID.
+    /// This method checks if the specified item ID exists in the for sale bag
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Item? getForSaleItem(string id)
     {
 
@@ -311,7 +334,11 @@ public class Inventory : IInventory
         return null;
     }
 
-
+    /// <summary>
+    /// gets an item from the inventory based on the specified item ID. This method checks if the specified item ID exists in the backpack
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Item? getItem(string id)
     {
         if (backpack.ContainsKey(id))
@@ -320,7 +347,12 @@ public class Inventory : IInventory
         }
         return null;
     }
-
+    /// <summary>
+    /// gets a string representation of an item from the inventory based on the specified item ID.
+    /// This method checks if the specified item ID exists in the backpack
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public string getItemInfo(string id)
     {
         if (backpack.ContainsKey(id))
@@ -330,7 +362,12 @@ public class Inventory : IInventory
         return "";
     }
 
-
+    /// <summary>
+    /// gets a health potion from the inventory based on the specified item ID.
+    /// This method checks if the specified item ID exists in the backpack
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Potion? GetHealthPotion(string id)
     {
         if (backpack.ContainsKey(id))
@@ -343,7 +380,13 @@ public class Inventory : IInventory
         return null;
     }
 
-
+    /// <summary>
+    /// Gets any consumable item from the inventory, such as health potions, mana potions, 
+    /// or other items that can be consumed for various effects. This method checks if the specified item ID exists in the backpack
+    /// and if it is of type IConsumable. If both conditions are met, it returns the consumable item; otherwise, it returns null.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public IConsumable? GetConsumables(string id)
     {
         if (backpack.ContainsKey(id))
@@ -356,9 +399,17 @@ public class Inventory : IInventory
         return null;
     }
 
-    
 
-
+    /// <summary>
+    /// Uses a specified amount of a consumable item from the inventory. This method checks if the specified item ID exists in the backpack
+    /// and if it is of type IConsumable. If both conditions are met, it then checks if the quantity of the item in the backpack is
+    /// sufficient to consume the specified amount. If so, it calls the Consume method on the consumable item, passing in the HealthEvents
+    /// and the amount to consume, and then removes the consumed amount from the inventory.
+    /// The method returns true if the item was successfully consumed, and false otherwise.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="amt"></param>
+    /// <returns></returns>
     public bool useItem( string id , int amt)
     {
         if (amt <= 0) return false;
@@ -379,7 +430,12 @@ public class Inventory : IInventory
     // Inventory managment
     //-------------------------------------------------------------------------------------------------------
 
-
+    /// <summary>
+    /// Adds an item to the inventory.
+    /// This method checks if adding the specified item would exceed the backpack's weight limit and capacity limit.
+    /// </summary>
+    /// <param name="item">The item to add to the inventory.</param>
+    /// <returns>True if the item was successfully added; otherwise, false.</returns>
     public bool AddItem(Item item)
     {
         double item_mass = (item.numberOf * item.mass);
@@ -407,7 +463,16 @@ public class Inventory : IInventory
     }
 
 
-
+    /// <summary>
+    /// Deletes a specified amount of an item from the inventory based on the item ID.
+    /// This method checks if the specified item ID exists in the backpack
+    /// and if the quantity of the item in the backpack is sufficient to delete the specified amount.
+    /// If so, it removes the specified amount from the inventory.
+    /// The method returns the actual amount of items deleted.
+    /// </summary>
+    /// <param name="id">The ID of the item to delete.</param>
+    /// <param name="ammount">The amount of the item to delete.</param>
+    /// <returns>The actual amount of items deleted.</returns>
     public int DelItem(string id, int ammount)
     {
         if (!backpack.ContainsKey(id))
@@ -433,7 +498,11 @@ public class Inventory : IInventory
         }
     }
 
-
+    /// <summary>
+    /// Gets a string representation of the inventory's current weight status, including the total weight of all items in the inventory,
+    /// equipment, and armor.
+    /// </summary>
+    /// <returns>A string representing the current weight status of the inventory.</returns>
     public string getInfo()
     {
         return $"Inventory total : [{getTotalWeight():F2}]lbs ||  Equipment : [{equipment_lbs:F2}]lbs || Armor : [{armor_lbs:F2}]lbs";
@@ -451,18 +520,18 @@ public class Inventory : IInventory
                 {
                     tmp +=
                             $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
-                            $"{"",-45}PHY: {item.physical_protection,5} | FIR: {item.fire_protection,5} | MGK: {item.magic_protection,5}\n";
+                            $"{"",-46}PHY: {item.physical_protection,5} | FIR: {item.fire_protection,5} | MGK: {item.magic_protection,5}\n";
                 }
             }
             if (equipment.Count > 0)
             {
-                tmp += "[ Equioment ]------------------------------------------------------------------\n";
+                tmp += "[ Equipment ]------------------------------------------------------------------\n";
                 foreach (Weapon item in equipment.Values)
                 {
 
                     tmp +=
                         $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
-                        $"{"",-45}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n";
+                        $"{"",-46}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n";
 
                 }
             }
@@ -472,7 +541,7 @@ public class Inventory : IInventory
 
                 foreach (var item in backpack.Values)
                 {
-                    tmp += $"{item.id,-45} >>> #: {item.numberOf,3} [Weight: {(item.mass * item.numberOf),8:F2}] lbs\n";
+                    tmp += $"{item.id,-46} >>> #: {item.numberOf,3} [Weight: {(item.mass * item.numberOf),8:F2}] lbs\n";
                 }
             }
             return tmp;

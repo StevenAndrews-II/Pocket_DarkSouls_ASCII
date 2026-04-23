@@ -47,7 +47,7 @@ namespace PocketDarkSouls
 
 
 
-            Item potion1 = new HealingPotion("HP", 6, .1, 250, 10);
+            //Item potion1 = new HealingPotion("HP", 6, .1, 250, 10);
 
 
             Room start              = mapGenerator.Generate();
@@ -55,9 +55,8 @@ namespace PocketDarkSouls
             _player.SpawnWarp(start);
 
 
-            //_player.main_inventory.AddItem(sword); // populate inventory
-            //_player.main_inventory.AddItem(sword2);
-            _player.main_inventory.AddItem(potion1);
+
+            //_player.main_inventory.AddItem(potion1);
             //_player.main_inventory.AddItem(armor);
         }
 
@@ -82,7 +81,7 @@ namespace PocketDarkSouls
                     if (!_player.health.isAlive())
                     {
                         _player.messenger.ErrorMessage("You have faild to reclaim yourself..." , ConsoleColor.Red);
-                        _player.messenger.ErrorMessage("press enter...", ConsoleColor.DarkRed);
+                        _player.messenger.ErrorMessage("Press Enter...", ConsoleColor.DarkRed);
                         string ok = Console.ReadLine();
 
                         // retart or respawn

@@ -6,7 +6,7 @@ public abstract class Potion : Item , IConsumable
     public void Consume(EntityEvents events, int amount) {
     }
 
-    public virtual void Hook(EntityEvents HealthEvent, int amt)
+    public virtual void Hook(EntityEvents events, int amt)
     {
     }
 }

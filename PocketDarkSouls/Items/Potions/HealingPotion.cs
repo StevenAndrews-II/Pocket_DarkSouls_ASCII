@@ -15,9 +15,9 @@
         this.Hook(events, amount);
     }
 
-    public override void Hook(EntityEvents HealthEvents, int amt)
+    public override void Hook(EntityEvents events, int amt)
     {
-        HealthEvents.RaiseHeal(amt * modifier);
+        events.RaiseHeal(amt * modifier);
     }
 
     public override string ToString()
