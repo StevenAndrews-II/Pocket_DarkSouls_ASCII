@@ -31,11 +31,8 @@ public class Merchant : Player
     //----------------------------------------------------------
     public override void AI()
     {
-        if (health.isAlive())
-        {
-            InventoryFlipping();
-            Roaming();
-        }
+        InventoryFlipping();
+        Roaming();
     }
 
 

@@ -1,8 +1,8 @@
 ﻿using PocketDarkSouls;
 
-public class Beggar : Player
+public class Goblin : Player
 {
-    public Beggar(
+    public Goblin(
         string name,
         List<Speak> dialog,
         Inventory I_,
@@ -15,14 +15,13 @@ public class Beggar : Player
     {
     }
 
-
     //----------------------------------------------------------
     // AI variables
     //----------------------------------------------------------
     Random dice = new Random();
     List<string> dir_ = new List<string>()
     {
-        "east","west","north","south"
+        "east","west","north","south" // characts stay on their floor and cant traverse (up and down)
     };
 
 
@@ -38,7 +37,7 @@ public class Beggar : Player
         // need to add a check to make sure youre not in a conversation / dialog - add time out of like 5 loops 
         // move around at random - random wait
         int roll = dice.Next(0, dir_.Count);
-        int motion_roll = dice.Next(0, 5);
+        int motion_roll = dice.Next(0, 50);
         if (motion_roll == 1)
         {
             goTo(dir_[roll]);

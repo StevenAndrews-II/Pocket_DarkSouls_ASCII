@@ -30,10 +30,7 @@ public class Person : Player
     //----------------------------------------------------------
     public override void AI()
     {
-        if (health.isAlive())
-        {
-            Roaming();
-        }
+       Roaming();
     }
     private void Roaming()
     {

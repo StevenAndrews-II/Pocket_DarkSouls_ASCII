@@ -87,7 +87,8 @@ namespace PocketDarkSouls
                         // retart or respawn
                         if (!_player.health.useLife())              // decrement and check
                         {
-                            // new game start here - generate new map
+                            // new game - clear players list / generate new map + NPCs / respawn player in new location
+                            Character_Creator.RemoveAllplayers();
                             Room start                  = mapGenerator.Generate();
                             _player                     = Character_Creator.createRandomPerson();
                             _player.SpawnWarp(start);

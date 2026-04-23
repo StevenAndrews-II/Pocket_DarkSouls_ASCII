@@ -46,7 +46,7 @@ public class MapGenerator
         {
             
             // roll for type 
-            int roll = rand.Next(0, 4);
+            int roll = rand.Next(0, 5);
             string type = "person";             // travelers
             switch (roll)
             {
@@ -56,6 +56,9 @@ public class MapGenerator
                         break;
                 case 3:
                     type        = "drunk";      // go to towns / taverns
+                    break;
+                case 4:
+                    type        = "goblin";     // go to mines / or traps
                     break;
             }
 
@@ -92,6 +95,13 @@ public class MapGenerator
             case "drunk":
                 return RollForTowns();
 
+            case "goblin":
+                if (roll == 0)
+                {
+                    return RollForTraps();
+                }
+                    return RollForMines();
+
         } return RollForTownOutskits();
     }
 
@@ -116,6 +126,17 @@ public class MapGenerator
         for (int i = 0; i < LEVELS; i++)
         {
             towns.AddRange(GetTownsAtLevel(i));
+        }
+        int roll = rand.Next(0, towns.Count);
+        return towns[roll];
+    }
+
+    public Room RollForTraps()
+    {
+        List<Room> towns = new List<Room>();
+        for (int i = 0; i < LEVELS; i++)
+        {
+            towns.AddRange(GetTrapsAtLevel(i));
         }
         int roll = rand.Next(0, towns.Count);
         return towns[roll];
@@ -174,6 +195,16 @@ public class MapGenerator
     {
         List<Room> list = new List<Room>();
         foreach (var (k, v) in mine_rooms_cache[level])
+        {
+            list.Add(v);
+        }
+        return list;
+    }
+
+    public List<Room> GetTrapsAtLevel(int level)
+    {
+        List<Room> list = new List<Room>();
+        foreach (var (k, v) in trap_rooms_cache[level])
         {
             list.Add(v);
         }

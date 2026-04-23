@@ -63,17 +63,48 @@ public class CharacterCreator
 
     /// <summary>
     /// Updates all players in the game. This should be called once per game loop iteration to ensure that all player states are updated correctly.
+    /// Removes any non-hero players that have died from the players dictionary.
+    /// This allows for dynamic changes to the game world as players interact with it and face challenges.
     /// </summary>
     public void update()
     {
         foreach (var (k,v) in players)
         {
-            v.update();
+            if (v.health.isAlive())
+            {
+                v.update();
+            }
+            else
+            {
+                if (v is not Hero)
+                {
+                    RemovePlayer(k);
+                }
+            }
         }
     }
 
 
+    /// <summary>
+    /// Removes a player from the players dictionary based on their name. This can be used to remove NPCs that have died or are no longer needed in the game world.
+    /// </summary>
+    /// <param name="name"></param>
+    public void RemovePlayer(string name)
+    {
+        if (players.ContainsKey(name))
+        {
+            players.Remove(name);
+        }
+    }
 
+    /// <summary>
+    /// Clears the players dictionary and resets the id count to 0. This can be used to reset the game state when starting a new game or when the player dies and needs to respawn.
+    /// </summary>
+    public void RemoveAllplayers()
+    {
+        idcount = 0;
+        players.Clear();
+    }
 
 
 
@@ -130,7 +161,7 @@ public class CharacterCreator
         // DI inject health system,and other systems here 
 
         EntityEvents Events             = new EntityEvents();
-        Wallet wallet                   = new Wallet(600, 100000);
+        Wallet wallet                   = new Wallet(600, 100000); // make random for final presentation
         HealthSystem health             = new HealthSystem(Events);
 
         Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
@@ -211,6 +242,20 @@ public class CharacterCreator
                 break;
             case "person":
                 character = new Person(
+                                                        name,               // Character name 
+                                                        dialogCommands,     // custom dialog prompt hooking 
+                                                        main_inventory,     // internal system 
+                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
+                                                        wallet,             // internal system 
+                                                        health,             // internal system
+
+                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
+                                                     );
+                Loot(character);
+                break;
+            case "Goblin":
+                character = new Goblin(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
