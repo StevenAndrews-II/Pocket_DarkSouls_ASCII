@@ -156,7 +156,7 @@ public class HealthSystem
     /// <param name="incriment_ammount">The amount of health to restore.</param>
     public void reginerate(int incriment_ammount)
     {
-        if (health_ammount < maxHealth)
+        if (health_ammount+incriment_ammount < maxHealth)
         {
             health_ammount += incriment_ammount;
         }

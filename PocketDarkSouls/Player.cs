@@ -53,7 +53,7 @@ namespace PocketDarkSouls
             this._currentRoom       = room;
             this.name               = name;
             this.messenger          = new Messenger(this);
-            this.dialogHandler      = new DialogHandler(this);
+            this.dialogHandler      = new DialogHandler();
             this.EventManager       = EventManager; 
 
 
