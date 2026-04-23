@@ -74,7 +74,7 @@ namespace PocketDarkSouls
         }
 
         /// <summary>
-        /// Abstract function for AI behavior, should be overridden in non player character classes to define their behavior. Called in the update loop.
+        /// Abstract optional function for AI behavior, should be overridden in non player character classes to define their behavior. Called in the update loop.
         /// </summary>
         public virtual void AI() { }
 
