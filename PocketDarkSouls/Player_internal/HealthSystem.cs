@@ -37,7 +37,7 @@ public class HealthSystem
         HealthEvents.OnHitRequested     += Hit;          // hit event
     }
 
-    public void  UpdateDefenseStats(int p_,int f_,int m_) // hmmmm......... major dumb problem
+    public void  UpdateDefenseStats(int p_,int f_,int m_) 
     {
         physical_defense    = p_;
         fire_defense        = f_;

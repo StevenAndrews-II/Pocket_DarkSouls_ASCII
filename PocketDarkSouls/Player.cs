@@ -29,6 +29,19 @@ namespace PocketDarkSouls
 
 
         public string name { get; init; }
+
+
+        /// <summary>
+        /// Player constructor, initializes the player's name, inventory, wallet, health system, dialog options, and event manager.
+        /// </summary>
+        /// <param name="name"              >The name of the player.</param>
+        /// <param name="dialog"            >A list of dialogue options available to the player.</param>
+        /// <param name="I_"                >The player's inventory.</param>
+        /// <param name="InventoryCommands" >A list of inventory commands available to the player.</param>
+        /// <param name="EventManager"      >The event manager for handling game events.</param>
+        /// <param name="W_"                >The player's wallet.</param>
+        /// <param name="H_"                >The player's health system.</param>
+        /// <param name="room"              >The initial room the player is in.</param>
         public Player(string name, List<Speak> dialog, Inventory I_, List<ICs> InventoryCommands , EntityEvents EventManager, Wallet W_, HealthSystem H_, Room room)
         {
             AddSpeakCommand(dialog);
@@ -50,7 +63,9 @@ namespace PocketDarkSouls
 
 
 
-        // internal updater 
+        /// <summary>
+        /// Internal update function - should be called in the main game loop, handles time based effects and AI for non player characters.
+        /// </summary>
         public void update()
         {
             health.update();
@@ -58,11 +73,17 @@ namespace PocketDarkSouls
             AI();
         }
 
-        // Overwritten by Player/Character types - see character abstracts
-        public virtual void AI() { } 
-            
+        /// <summary>
+        /// Abstract function for AI behavior, should be overridden in non player character classes to define their behavior. Called in the update loop.
+        /// </summary>
+        public virtual void AI() { }
 
-        // add speak command user interface linkers 
+
+        /// <summary>
+        /// Adds speak commands to the player's list of available commands, allowing them to interact with the game world through dialogue.
+        /// Should be called during player initialization to set up their dialogue options.
+        /// </summary>
+        /// <param name="cmd"></param>
         public void AddSpeakCommand(List<Speak> cmd)
         {
             foreach (Speak speak in cmd)
@@ -70,7 +91,11 @@ namespace PocketDarkSouls
                 SpeakCommands.Add(speak.keyword, speak);
             }
         }
-        // Internal player systems hooking 
+        /// <summary>
+        /// Adds inventory commands to the player's list of available commands, allowing them to interact with their inventory and the game world.
+        /// Should be called during player initialization to set up their inventory options.
+        /// </summary>
+        /// <param name="cmd"></param>
         public void AddInventoryCommand(List<ICs> cmd)
         {
             foreach (ICs inv_cmd in cmd)
@@ -82,7 +107,11 @@ namespace PocketDarkSouls
 
 
 
-        // looks internally in the list of availible speak commands and passes it to subsystems
+        /// <summary>
+        /// Looks up a speak command by its keyword, returning the corresponding Speak object if found, or null if not found.
+        /// </summary>
+        /// <param name="key">The keyword of the speak command to look up.</param>
+        /// <returns>The corresponding Speak object if found; otherwise, null.</returns>
         public Speak? LookUpSpeakCommand(string key)
         {
             if (SpeakCommands.ContainsKey(key))
@@ -94,7 +123,11 @@ namespace PocketDarkSouls
 
 
 
-        // get infor about player ( name and type // EG: Steven_andrews : Merchant )
+        /// <summary>
+        /// Gets basic information about the player, such as their name and type, and returns it as a list of strings.
+        /// This can be used for display purposes or other game mechanics that require player information.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetInfo()
         {
             var info = new List<string>();
@@ -108,7 +141,10 @@ namespace PocketDarkSouls
         // motion 
         //-----------------------------------------------------------------------------------------
 
-        // warps directly to room - used for spawn as well 
+        /// <summary>
+        /// Spawns the player into a specified room, handling the necessary logic for leaving the current room and entering the new room.
+        /// </summary>
+        /// <param name="room">The room to spawn the player into.</param>
         public void SpawnWarp(Room room) // push to room 
         {
             if (CurrentRoom != null)
@@ -123,7 +159,11 @@ namespace PocketDarkSouls
         }
 
 
-
+        /// <summary>
+        /// Moves the player to a new room in the specified direction, if an exit exists in that direction.
+        /// Handles the necessary logic for leaving the current room and entering the new room, and provides feedback if no exit exists in the specified direction.
+        /// </summary>
+        /// <param name="direction"></param>
         public void goTo(string direction)
         {
             Room nextRoom = CurrentRoom.GetExit(direction);
