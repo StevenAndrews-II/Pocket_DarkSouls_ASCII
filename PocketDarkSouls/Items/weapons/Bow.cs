@@ -18,7 +18,7 @@ public class Bow : Weapon
     }
 
 
-    public override void Hook(HealthSystem HP)
+    public override void Hook(EntityEvents events)
     {
         // add effects 
         // hook into HP

@@ -336,10 +336,10 @@ public class Inventory : IInventory
     public bool useItem( string id , int amt)
     {
         if (amt <= 0) return false;
-        Potion healthPotion = GetHealthPotion(id);
-        if (healthPotion!=null)
+        Potion? potion_ = GetHealthPotion(id);
+        if (potion_!=null)
         {
-            healthPotion.Hook(HP,amt);
+            potion_.Hook(HP.HealthEvents, amt);
             int amt_ = DelItem(id, amt);
             return true;
         }

@@ -16,7 +16,7 @@ public class Sword:Weapon
         base.effective_range    = range;
 
     }
-    public override void Hook(HealthSystem HP)
+    public override void Hook(EntityEvents events)
     {
         // add effects 
         // hook into HP

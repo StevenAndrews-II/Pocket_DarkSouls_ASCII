@@ -13,13 +13,13 @@ namespace PocketDarkSouls
 
         public string type { get; init; }
 
-        public Inventory        main_inventory; // move this to a maker 
+        public Inventory        main_inventory; 
         public Wallet           wallet;
         public HealthSystem     health;
         public DialogHandler    dialogHandler;
         public Messenger        messenger;
 
-        
+        public EntityEvents     EventManager;
 
 
         public Dictionary<string, Speak> SpeakCommands { get; init; } = new Dictionary<string, Speak>();    
@@ -29,7 +29,7 @@ namespace PocketDarkSouls
 
 
         public string name { get; init; }
-        public Player(string name, List<Speak> dialog, Inventory I_, List<ICs> InventoryCommands ,Wallet W_, HealthSystem H_, Room room)
+        public Player(string name, List<Speak> dialog, Inventory I_, List<ICs> InventoryCommands , EntityEvents EventManager, Wallet W_, HealthSystem H_, Room room)
         {
             AddSpeakCommand(dialog);
             AddInventoryCommand(InventoryCommands);
@@ -41,7 +41,9 @@ namespace PocketDarkSouls
             this.name               = name;
             this.messenger          = new Messenger(this);
             this.dialogHandler      = new DialogHandler(this);
-           
+            this.EventManager       = EventManager; 
+
+
         }
 
 

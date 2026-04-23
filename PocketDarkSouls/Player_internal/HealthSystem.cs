@@ -4,10 +4,10 @@ using System.Data;
 public class HealthSystem
 {
     private int maxHealth               = 100;
-	private int health_ammount          = 100;
+	private int health_ammount          = 50;
 
+    public EntityEvents HealthEvents { get; private set; }
 
-    
     private int fire_defense            = 0; // updated from inventory equiped slots 
     private int physical_defense        = 0;
     private int magic_defense           = 0;
@@ -30,9 +30,12 @@ public class HealthSystem
     private int potion_effect_amt       = 2;
 
 
-    public HealthSystem()
-	{
-	}
+    public HealthSystem(EntityEvents events)
+    {
+        HealthEvents                    = events;
+        HealthEvents.OnHealRequested    += reginerate;   // healing event
+        HealthEvents.OnHitRequested     += Hit;          // hit event
+    }
 
     public void  UpdateDefenseStats(int p_,int f_,int m_) // hmmmm......... major dumb problem
     {

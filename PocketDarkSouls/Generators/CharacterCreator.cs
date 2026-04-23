@@ -120,9 +120,9 @@ public class CharacterCreator
 
         // DI inject health system,and other systems here 
 
-        
+        EntityEvents Events             = new EntityEvents();
         Wallet wallet                   = new Wallet(600, 100000);
-        HealthSystem health             = new HealthSystem();
+        HealthSystem health             = new HealthSystem(Events);
 
         Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
 
@@ -149,6 +149,7 @@ public class CharacterCreator
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
                                                         inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
 
@@ -165,6 +166,7 @@ public class CharacterCreator
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
                                                         inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
 
@@ -178,6 +180,7 @@ public class CharacterCreator
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
                                                         inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
 
@@ -190,6 +193,7 @@ public class CharacterCreator
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
                                                         inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
 
@@ -202,6 +206,7 @@ public class CharacterCreator
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
                                                         inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                        Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
 
@@ -215,6 +220,7 @@ public class CharacterCreator
                                                        dialogCommands,     // custom dialog prompt hooking 
                                                        main_inventory,     // internal system 
                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
+                                                       Events,
                                                        wallet,             // internal system 
                                                        health,             // internal system
 
