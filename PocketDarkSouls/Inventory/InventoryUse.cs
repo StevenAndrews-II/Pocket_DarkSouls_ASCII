@@ -6,8 +6,6 @@ public class InventoryUse : ICs
 
     public void Execute(Player p1, string? key = null)
     {
-
-
         // Window loop
         bool used = false;
         while (key != null)
@@ -35,7 +33,5 @@ public class InventoryUse : ICs
         {
             p1.messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
         }
-
-
     }
 }
