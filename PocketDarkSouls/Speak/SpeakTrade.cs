@@ -33,7 +33,7 @@ public class SpeakTrade : Speak
             int option_select = 0;
             while (true)
             {
-                Console.WriteLine("--------------------------------[ Trade Menu ]--------------------------------", ConsoleColor.White);
+                Console.WriteLine("------------------------------------[ Trade Menu ]------------------------------------", ConsoleColor.White);
                 for (int i = 0; i < forsale.Count; i++)
                 {
                     Console.WriteLine($"{i,-3} : {forsale[i].id,-35}  >> ", ConsoleColor.White);
@@ -64,6 +64,7 @@ public class SpeakTrade : Speak
             }
 
             Item? purchase = p2.main_inventory.getForSaleItem(forsale[option_select].id);
+            // handle case where item is no longer for sale
             if (purchase == null)
             {
                 p1.messenger.ReciveMessage(p2.name,"Seems there is nothing available for purchase.", ConsoleColor.Magenta);
