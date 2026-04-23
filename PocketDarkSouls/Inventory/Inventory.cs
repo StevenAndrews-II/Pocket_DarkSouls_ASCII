@@ -119,7 +119,6 @@ public class Inventory
             if (v is Weapon || v is Helmet || v is ChestPlate)
             {
                 Equip(k);
-                continue;
             }
         }
     }

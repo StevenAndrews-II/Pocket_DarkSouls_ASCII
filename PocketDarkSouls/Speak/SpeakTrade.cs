@@ -44,7 +44,7 @@ public class SpeakTrade : Speak
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int result))
                 {
-                    if (result >= 0 && result <= forsale.Count)
+                    if (result >= 0 && result < forsale.Count)
                     {
                         option_select = result;
                         break; 
@@ -63,8 +63,14 @@ public class SpeakTrade : Speak
                 }
             }
 
-            Item purchase = p2.main_inventory.getForSaleItem(forsale[option_select].id);
-            // handle money transaction 
+            Item? purchase = p2.main_inventory.getForSaleItem(forsale[option_select].id);
+            if (purchase == null)
+            {
+                p1.messenger.ReciveMessage(p2.name,"Seems there is nothing available for purchase.", ConsoleColor.Magenta);
+                return;
+            }
+            // handle cash transaction 
+            
             if (p1.wallet.gold < purchase.price)
             {
                 p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NotEnoughToTrade(this), ConsoleColor.Magenta);
