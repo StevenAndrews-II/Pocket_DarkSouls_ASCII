@@ -83,7 +83,7 @@ public class SpeakTrade : Speak
                 p2.wallet.AddGold(purchase.price);
             }
             // transfer item 
-            p2.main_inventory.DelItem(purchase.id, 1);
+            p2.main_inventory.SoldItem(purchase.id, 1);
             p1.main_inventory.AddItem(purchase);
         }
         else

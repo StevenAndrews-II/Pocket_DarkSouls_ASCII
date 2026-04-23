@@ -1,4 +1,5 @@
-﻿using PocketDarkSouls;
+﻿using Microsoft.VisualBasic.FileIO;
+using PocketDarkSouls;
 using System;
 
 public class Inventory 
@@ -293,6 +294,25 @@ public class Inventory
         }
     }
 
+
+    public void SoldItem(string id, int amt)
+    {
+        int amt_ = Math.Abs(amt); // user guard
+        if (forSale.ContainsKey(id))
+        {
+            if (forSale[id].numberOf > amt_)
+            {
+                forSale[id].numberOf    -= amt_;                                        // remove from forsale bag 
+                forSale_lbs             -= forSale[id].numberOf * forSale[id].mass;     // update mass
+            }
+            else
+            {
+                forSale_lbs             -= forSale[id].numberOf * forSale[id].mass;     // update mass
+                forSale.Remove(id);
+            }
+        }
+    }
+
     //-------------------------------------------------------------------------------------------------------
     // Locate
     //-------------------------------------------------------------------------------------------------------
@@ -332,6 +352,7 @@ public class Inventory
         }
         return null;
     }
+
 
     /// <summary>
     /// gets an item from the inventory based on the specified item ID. This method checks if the specified item ID exists in the backpack
@@ -496,6 +517,11 @@ public class Inventory
             return temp_actualAmmount;
         }
     }
+
+    //-------------------------------------------------------------------------------------------------------
+    // Readouts 
+    //-------------------------------------------------------------------------------------------------------
+
 
     /// <summary>
     /// Gets a string representation of the inventory's current weight status, including the total weight of all items in the inventory,
