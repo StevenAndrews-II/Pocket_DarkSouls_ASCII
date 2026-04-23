@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class CharacterCreator
-{
+{ 
 
     List<string> maleMinerNames = new List<string>
 {
@@ -254,7 +254,7 @@ public class CharacterCreator
                                                      );
                 Loot(character);
                 break;
-            case "Goblin":
+            case "goblin":
                 character = new Goblin(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 

@@ -123,6 +123,81 @@ public class DialogCreator
 
         },
 
+
+        ["goblin"] = new Dictionary<string, List<string>>()
+        {
+            ["engage"] = new List<string>()
+            {
+                "Fresh meat walks itself to blade!",
+                "Heh-heh! I take your bones!",
+                "You look soft... I test that!",
+                "Gold and guts! I take both!",
+                "You lost, bigfolk? Now you die lost!",
+                "Goblin hungry for screams!",
+                "I carve you up nice and slow!",
+                "You bleed easy, I can smell it!",
+                "Your skull fit good on my pile!",
+                "Run fast—makes hunt fun!"
+            },
+
+            ["attack"] = new List<string>()
+            {
+                "Hold still—I cut you open!",
+                "Scream louder! I like that!",
+                "Bleed for me!",
+                "I take that arm!",
+                "You weak! Too weak!",
+                "I break you piece by piece!",
+                "Fight back! Make it fun!",
+                "Your pain feeds me!",
+                "I gut you!",
+                "Die, die, DIE!"
+            },
+
+            ["taunt"] = new List<string>()
+            {
+                "Is that all you got?!",
+                "I’ve eaten tougher than you!",
+                "Swing harder, coward!",
+                "You fight like a dying rat!",
+                "Big body, tiny strength!",
+                "I thought heroes were strong!",
+                "You already dead—you just not know!",
+                "Pathetic! Even worms bite harder!",
+                "I laugh while you bleed!",
+                "You slow... I fast!"
+            },
+
+            ["low_health"] = new List<string>()
+            {
+                "Ghh—no! I not die here!",
+                "You got lucky hit!",
+                "I still kill you!",
+                "Bleeding... but not done!",
+                "I take you with me!",
+                "Not over! NEVER over!",
+                "I bite your throat out!",
+                "You pay for that!",
+                "I still standing!",
+                "You die first!"
+            },
+
+            ["death"] = new List<string>()
+            {
+                "No... no... not like this...",
+                "I come back... always...",
+                "You... lucky...",
+                "Others... will find you...",
+                "Goblin... remembers...",
+                "*choking hiss*",
+                "Not fair... not fair...",
+                "I... was strong...",
+                "You... die later...",
+                "...dark takes me..."
+            }
+        },
+
+
         ["neutral"] = new Dictionary<string, List<string>>()
         {
             ["generic"] = new List<string>()
@@ -194,6 +269,12 @@ public class DialogCreator
         {
             tmp.Add(new SpeakTo(dialog["neutral"]));
             tmp.Add(new SpeakTrade(dialog["neutral"]));
+            return tmp;
+        }
+
+        if (character_type == "goblin")
+        {
+            tmp.Add(new SpeakTo(dialog["goblin"]));
             return tmp;
         }
         tmp.Add(new SpeakTo(dialog["neutral"]));
