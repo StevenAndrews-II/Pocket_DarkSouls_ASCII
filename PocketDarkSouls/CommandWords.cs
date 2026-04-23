@@ -14,7 +14,7 @@ namespace PocketDarkSouls
     public class CommandWords
     {
         private Dictionary<string, Command> _commands;
-        private static Command[] _commandArray = { new GoCommand(), new QuitCommand() , new ActionCommand(), new InventoryCommand() , new TalkCommand() };
+        private static Command[] _commandArray = { new GoCommand(), new QuitCommand() , new ActionCommand(), new InventoryCommand() , new TalkCommand(), new FightCommand()};
 
         public CommandWords() : this(_commandArray) {}
 

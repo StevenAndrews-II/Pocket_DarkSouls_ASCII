@@ -4,12 +4,13 @@ public class InventoryUse : ICs
 {
     public string keyword { get; } = "use"; // comand to initate this section
 
-    public void Execute(Player p1, string key = null)
+    public void Execute(Player p1, string? key = null)
     {
+
 
         // Window loop
         bool used = false;
-        while (true)
+        while (key != null)
         {
             Console.WriteLine(p1.main_inventory.getItemInfo(key),ConsoleColor.White);
             Console.WriteLine("Input an ammount to use:",ConsoleColor.White);

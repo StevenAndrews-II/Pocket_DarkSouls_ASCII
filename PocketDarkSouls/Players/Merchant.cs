@@ -42,6 +42,7 @@ public class Merchant : Player
     //----------------------------------------------------------
     // plugin functions 
     //----------------------------------------------------------
+
     private void InventoryFlipping()
     {
         // get 5 items ( if we have em, and list them for sale 

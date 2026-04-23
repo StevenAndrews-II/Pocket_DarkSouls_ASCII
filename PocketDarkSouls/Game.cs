@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PocketDarkSouls
 {
@@ -40,18 +42,12 @@ namespace PocketDarkSouls
             Character_Creator       = new CharacterCreator(itemCreator);
             mapGenerator            = new MapGenerator(Character_Creator, itemCreator);
             _parser                 = new Parser(new CommandWords());
-            
 
 
-            // generate map and insert player into it
 
 
-             
-            //Item sword         = new Sword("Short_sword",1,12,100,25);                                    // items generation concept exampe code for a generator ( kinda sketch give me a second ) 
-            //Item sword2        = new Sword("Heavy_sword",1, 15, 250, 32);
-            Item potion1       = new HealingPotion("Hp_elixer", 1, 1, 250, 20);
 
-            Item armor         = new Helmet("Vile_Helmet",1 , 5, 35,10,3,1);
+            Item potion1 = new HealingPotion("HP", 6, .1, 250, 10);
 
 
             Room start              = mapGenerator.Generate();
@@ -62,7 +58,7 @@ namespace PocketDarkSouls
             //_player.main_inventory.AddItem(sword); // populate inventory
             //_player.main_inventory.AddItem(sword2);
             _player.main_inventory.AddItem(potion1);
-            _player.main_inventory.AddItem(armor);
+            //_player.main_inventory.AddItem(armor);
         }
 
 

@@ -109,6 +109,17 @@ public class Inventory : IInventory
 
 
 
+    public void random_equip()
+    {
+        foreach (var (k, v) in backpack)
+        {
+            if (v is Weapon || v is Helmet || v is ChestPlate)
+            {
+                Equip(k);
+            }
+        }
+    }
+
 
 
     Dictionary<string, bool> sections = new Dictionary<string, bool>
@@ -316,7 +327,7 @@ public class Inventory : IInventory
         {
             return backpack[id].ToString();
         }
-        return null;
+        return "";
     }
 
 
@@ -333,15 +344,32 @@ public class Inventory : IInventory
     }
 
 
+    public IConsumable? GetConsumables(string id)
+    {
+        if (backpack.ContainsKey(id))
+        {
+            if (backpack[id] is IConsumable)
+            {
+                return (IConsumable)backpack[id];
+            }
+        }
+        return null;
+    }
+
+    
+
+
     public bool useItem( string id , int amt)
     {
         if (amt <= 0) return false;
-        Potion? potion_ = GetHealthPotion(id);
-        if (potion_!=null)
+        IConsumable? consumable = GetHealthPotion(id);
+        if (consumable != null)
         {
-            potion_.Hook(HP.HealthEvents, amt);
-            int amt_ = DelItem(id, amt);
-            return true;
+            if (backpack[id].numberOf >= amt ) {
+                consumable.Consume(HP.HealthEvents, amt);
+                DelItem(id, amt);
+                return true;
+            }
         }
         return false;
     }

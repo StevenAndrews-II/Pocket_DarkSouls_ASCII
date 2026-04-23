@@ -240,6 +240,7 @@ public class CharacterCreator
         int numberOf_roll   = rand.Next(0, 5);
         int type_roll       = 0;
         Item _;
+
         for (int i = 0; i < numberOf_roll; i++)
         {
 
@@ -264,6 +265,7 @@ public class CharacterCreator
                     break;
             }
         }
+        p.main_inventory.random_equip();
     }
 
 }

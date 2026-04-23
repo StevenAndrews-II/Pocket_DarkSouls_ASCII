@@ -1,31 +1,28 @@
-﻿
-
-public class HealingPotion : Potion
+﻿public class HealingPotion : Potion, IConsumable
 {
-
     public HealingPotion(string id, int numberOf, double mass, double price, int modifier)
     {
-        base.id = id;
-        base.price = price;
-        base.mass = mass;
-        base.numberOf = numberOf;
-        base.modifier = modifier;
-
+        this.id = id;
+        this.price = price;
+        this.mass = mass;
+        this.numberOf = numberOf;
+        this.modifier = modifier;
     }
 
-    public override void Hook(EntityEvents HealthEvents , int amt)
+ 
+    public new void Consume(EntityEvents events, int amount)
     {
-        HealthEvents.RaiseHeal(amt*modifier);
+        this.Hook(events, amount);
     }
-    
 
-    
+    public override void Hook(EntityEvents HealthEvents, int amt)
+    {
+        HealthEvents.RaiseHeal(amt * modifier);
+    }
+
     public override string ToString()
     {
-        string price = $"{this.id,-30} >> " +
-                      $"Wt:{this.mass,7:F2} lbs | ${this.price,8:F2}\n";
-        string stats = $"{"",-40}Healing:{this.modifier}\n";
-
-        return price+ stats;
+        return $"{id,-30} >> Wt:{mass,7:F2} lbs | ${price,8:F2}\n" +
+               $"{"",-40}Healing:{modifier} | Qty:{numberOf}\n";
     }
 }
