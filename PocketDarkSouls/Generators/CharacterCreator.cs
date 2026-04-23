@@ -61,7 +61,9 @@ public class CharacterCreator
 
 
 
-    // on each revolution of the parser, this updates all players/NPCs in the game 
+    /// <summary>
+    /// Updates all players in the game. This should be called once per game loop iteration to ensure that all player states are updated correctly.
+    /// </summary>
     public void update()
     {
         foreach (var (k,v) in players)
@@ -73,9 +75,16 @@ public class CharacterCreator
 
 
 
- 
 
 
+    /// <summary>
+    /// Creates a random player character with a unique name, randomly generated inventory, and appropriate command sets based on the specified type.
+    /// The character is then added to the players dictionary and returned.
+    /// This method can be used to create both user-controlled characters and AI-controlled NPCs, allowing for a diverse range of characters in the game world.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public Player createRandomPerson(string? name = null, string? type = "user") // this is about 9,801(x2) per gender /  19,602 total combinations  99x99
     {
 
@@ -129,7 +138,7 @@ public class CharacterCreator
 
         // bind user only commands
         List<Speak>  dialogCommands = dialogCreator.MakeDialogSet(type);
-        List<ICs> inventoryCommands = new List<ICs>();    // hook into commands for inventory - would need to be on all players if we can body swap ??  this gies you fron end acess to that characts inventory
+        List<ICs> inventoryCommands = new List<ICs>();    // hook into commands for inventory - would need to be on all players if we can body swap ??  this gies you frontend acess to that characts inventory
 
         inventoryCommands.Add(new InventoryOpen());
         inventoryCommands.Add(new InventoryEquip());      // really only needs to load for user 
@@ -235,6 +244,12 @@ public class CharacterCreator
         return character;
     }
 
+    /// <summary>
+    /// Creates a random number of loot items and adds them to the players inventory, then randomly equips some of them. 
+    /// This is called on character creation for certain types, but could be used for any character at any time ( including merchants ) to add some randomization to the game.
+    /// Could also be used for random loot drops from enemies 
+    /// </summary>
+    /// <param name="p">The player to receive the loot.</param>
     private void Loot(Player p)
     {
         int numberOf_roll   = rand.Next(0, 5);
