@@ -189,7 +189,7 @@ public class CharacterCreator
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
-                Loot(character);
+                Loot(character,1);
                 break;
                 
 
@@ -205,7 +205,7 @@ public class CharacterCreator
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
-                Loot(character);
+                Loot(character,3);
                 break;
             case "beggar":
                 character = new Beggar(
@@ -242,7 +242,7 @@ public class CharacterCreator
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
-                Loot(character);
+                Loot(character,1);
                 break;
             case "goblin":
                 character = new Goblin(
@@ -255,7 +255,7 @@ public class CharacterCreator
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
-                Loot(character);
+                Loot(character,2);
                 break;
             default:
                 character = new Person(
@@ -283,9 +283,9 @@ public class CharacterCreator
     /// Could also be used for random loot drops from enemies 
     /// </summary>
     /// <param name="p">The player to receive the loot.</param>
-    private void Loot(Player p)
+    private void Loot(Player p,int rarity = -1)
     {
-        int numberOf_roll   = rand.Next(0, 5);
+        int numberOf_roll   = rand.Next(0, 6);
         int type_roll       = 0;
         Item? _;
 
@@ -313,7 +313,13 @@ public class CharacterCreator
                     break;
             }
 
-            _ = itemCreator.Generate(type);
+            if (rarity < 0  || rarity > 3)
+            {
+                rarity = rand.Next(0, 4);
+            }   
+
+
+            _ = itemCreator.Generate(type, rarity);
             if (_!=null) {
                 p.main_inventory.AddItem(_);
             }

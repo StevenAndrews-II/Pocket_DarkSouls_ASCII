@@ -111,7 +111,7 @@ namespace PocketDarkSouls
                     Console.Write("\n>");
                     Command command = _parser.ParseCommand(Console.ReadLine());
                     Console.Clear();           // clear console
-                    _player.messenger.Clear(); // clear rdraw buffer 
+                    _player.messenger.Clear(); // clear draw buffer 
 
                     if (command == null)
                     {   

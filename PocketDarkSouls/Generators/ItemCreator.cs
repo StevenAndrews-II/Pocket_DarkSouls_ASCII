@@ -82,18 +82,18 @@ public class ItemCreator
 
 
 
-    public Item? Generate(string type)
+    public Item? Generate(string type,int rarity)
     {
         switch (type)
         {
             case "sword":
-                return Weapon_Maker("Sword");
+                return Weapon_Maker("Sword", rarity);
             case "helmet":
-                return Armor_Maker("Helmet");
+                return Armor_Maker("Helmet", rarity);
             case "chestplate":
-                return Armor_Maker("ChestPlate");
+                return Armor_Maker("ChestPlate", rarity );
             case "HP":
-                return Potions_Maker("HP");
+                return Potions_Maker("HP", rarity);
             default: return null;
         }
     }
@@ -101,10 +101,14 @@ public class ItemCreator
     //-------------------------------------------------------------------------------------------------------------
     // potions maker 
     //-------------------------------------------------------------------------------------------------------------
-    private Item? Potions_Maker(string type)
+    private Item? Potions_Maker(string type, int rarity)
     {
-        int special_roll = dice.Next(0, 2);
+        if (rarity < 0 || rarity > 3)
+        {
+            throw new ArgumentException($"Rarity must be between 0 and 3. Provided value: {rarity}  ");
+        }
 
+        int special_roll = dice.Next(0, rarity);
         string first            = "";
         string second           = "";
         int first_name_roll     = 0;
@@ -156,6 +160,7 @@ public class ItemCreator
 
                 price_roll              = dice.Next(40, 50) + dice.NextDouble();
                 break;
+
         }
 
 
@@ -179,9 +184,14 @@ public class ItemCreator
     // weapons maker
     //-------------------------------------------------------------------------------------------------------------
 
-    private Item Weapon_Maker(string type)
+    private Item Weapon_Maker(string type, int rarity)
     {
-        int special_roll = dice.Next(0, 2);
+        if (rarity < 0 || rarity > 3)
+        {
+            throw new ArgumentException($"Rarity must be between 0 and 3. Provided value: {rarity}  ");
+        }
+
+        int special_roll = dice.Next(0, rarity);
 
         string first            = "";
         string second           = "";
@@ -262,9 +272,14 @@ public class ItemCreator
     //-------------------------------------------------------------------------------------------------------------
     // Armor maker
     //-------------------------------------------------------------------------------------------------------------
-    private Item? Armor_Maker(string middle)
+    private Item? Armor_Maker(string middle, int rarity)
     {
-        int special_roll = dice.Next(0, 2);
+        if (rarity < 0 || rarity > 3)
+        {
+            throw new ArgumentException($"Rarity must be between 0 and 3. Provided value: {rarity}");
+        }
+
+        int special_roll = dice.Next(0, rarity);
 
         string first                = "";
         string second               = "";
