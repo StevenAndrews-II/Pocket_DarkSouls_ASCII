@@ -9,7 +9,7 @@ public class DialogHandler
     // Combat interactions 
     //---------------------------------------------------------------------------------------------------------
 
-    public string CombatEngageSpeach(Speak cmd)
+    public string CombatEngageSpeach(Combat cmd)
     {
         if (cmd.Dialog.ContainsKey("engage"))
         {
@@ -21,7 +21,7 @@ public class DialogHandler
 
     }
 
-    public string CombatAttackSpeach(Speak cmd)
+    public string CombatAttackSpeach(Combat cmd)
     {
         if (cmd.Dialog.ContainsKey("attack"))
         {
@@ -33,7 +33,7 @@ public class DialogHandler
 
     }
 
-    public string CombatTauntSpeach(Speak cmd)
+    public string CombatTauntSpeach(Combat cmd)
     {
         if (cmd.Dialog.ContainsKey("taunt"))
         {
@@ -45,7 +45,7 @@ public class DialogHandler
 
     }
 
-    public string CombatLowHPSpeach(Speak cmd)
+    public string CombatLowHPSpeach(Combat cmd)
     {
         if (cmd.Dialog.ContainsKey("low_health"))
         {
@@ -57,7 +57,7 @@ public class DialogHandler
 
     }
 
-    public string CombatDeathSpeach(Speak cmd)
+    public string CombatDeathSpeach(Combat cmd)
     {
         if (cmd.Dialog.ContainsKey("death"))
         {
@@ -74,85 +74,84 @@ public class DialogHandler
     //---------------------------------------------------------------------------------------------------------
 
 
-    public string GenericSpeach( Speak cmd )
+    public string GenericSpeach(Dictionary<string, List<string>> cmd )
 	{
-		if (cmd.Dialog.ContainsKey("generic"))
+		if (cmd.ContainsKey("generic"))
 		{
-			int roll = rand.Next(0, cmd.Dialog["generic"].Count);
-            return $"{cmd.Dialog["generic"][roll]}";
-
+			int roll = rand.Next(0, cmd["generic"].Count);
+            return $"{cmd["generic"][roll]}";
         }
         return "...";
 
 	}
 
-    public string TradeSpeach(Speak cmd)
+    public string TradeSpeach(Dictionary<string, List<string>> cmd)
     {
-        if (cmd.Dialog.ContainsKey("trade"))
+        if (cmd.ContainsKey("trade"))
         {
-            int roll = rand.Next(0, cmd.Dialog["trade"].Count);
-            return $"{cmd.Dialog["trade"][roll]}";
+            int roll = rand.Next(0, cmd["trade"].Count);
+            return $"{cmd["trade"][roll]}";
 
         }
         return "...";
     }
 
 
-    public string ThankYouSpeach(Speak cmd)
+    public string ThankYouSpeach(Dictionary<string, List<string>> cmd)
     {
-        if (cmd.Dialog.ContainsKey("thanks"))
+        if (cmd.ContainsKey("thanks"))
         {
-            int roll = rand.Next(0, cmd.Dialog["thanks"].Count);
-            return $"{cmd.Dialog["thanks"][roll]}";
+            int roll = rand.Next(0, cmd["thanks"].Count);
+            return $"{cmd["thanks"][roll]}";
 
         }
         return "...";
     }
 
-    public string NothingToTradeSpeach(Speak cmd)
+    public string NothingToTradeSpeach(Dictionary<string, List<string>> cmd)
     {
-        if (cmd.Dialog.ContainsKey("notrade"))
+        if (cmd.ContainsKey("notrade"))
         {
-            int roll = rand.Next(0, cmd.Dialog["notrade"].Count);
-            return $"{cmd.Dialog["notrade"][roll]}";
+            int roll = rand.Next(0, cmd["notrade"].Count);
+            return $"{cmd["notrade"][roll]}";
 
         }
         return "...";
     }
 
 
-    public string NotEnoughToTrade(Speak cmd)
+    public string NotEnoughToTrade(Dictionary<string, List<string>> cmd)
     {
-        if (cmd.Dialog.ContainsKey("notenough"))
+        if (cmd.ContainsKey("notenough"))
         {
-            int roll = rand.Next(0, cmd.Dialog["notenough"].Count);
-            return $"{cmd.Dialog["notenough"][roll]}";
+            int roll = rand.Next(0, cmd["notenough"].Count);
+            return $"{cmd["notenough"][roll]}";
 
         }
         return "...";
     }
 
-    public string BadCharity(Speak cmd, int level)
+    public string BadCharity(Dictionary<string, List<string>> cmd, int level)
     {
         string select = "badcharity_neutral";
         if (level == 1) {
             select = "badcharity_hostile";
         }
-        if (cmd.Dialog.ContainsKey(select))
+        if (cmd.ContainsKey(select))
         {
-            int roll = rand.Next(0, cmd.Dialog[select].Count);
-            return $"{cmd.Dialog[select][roll]}";
+            int roll = rand.Next(0, cmd[select].Count);
+            return $"{cmd[select][roll]}";
 
         }
         return "...";
     }
 
-    public string QuitTrade(Speak cmd)
+    public string QuitTrade(Dictionary<string, List<string>> cmd)
     {
-        if (cmd.Dialog.ContainsKey("quittrade"))
+        if (cmd.ContainsKey("quittrade"))
         {
-            int roll = rand.Next(0, cmd.Dialog["quittrade"].Count);
-            return $"{cmd.Dialog["quittrade"][roll]}";
+            int roll = rand.Next(0, cmd["quittrade"].Count);
+            return $"{cmd["quittrade"][roll]}";
 
         }
         return "...";

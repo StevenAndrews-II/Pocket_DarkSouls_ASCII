@@ -18,6 +18,6 @@ public class SpeakTo : Speak
 	{
 		p1.messenger.WarningMessage($"Speaking with : [ {p2.name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
         // hooks p2s dialog handler to p1s messenger and sends random message in the dialog list
-        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.GenericSpeach(this),ConsoleColor.Magenta);
+        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.GenericSpeach(this.Dialog),ConsoleColor.Magenta);
 	}
 }

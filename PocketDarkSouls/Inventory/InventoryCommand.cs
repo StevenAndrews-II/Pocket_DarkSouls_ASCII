@@ -14,7 +14,16 @@ namespace PocketDarkSouls
         }
 
 
-
+        Dictionary<string, ICs> InventoryCommands = new Dictionary<string, ICs>()
+        {
+            ["open"]            = new InventoryOpen(),
+            ["equip"]           = new InventoryEquip(),
+            ["unequip"]         = new InventoryUnequip(),
+            ["use"]             = new InventoryUse(),
+            //["drop"]          = new InventoryDrop(),
+            //["markforsale"]   = new InventoryMarkForSale(),
+            //["unmarkforsale"] = new InventoryUnMarkForSale(),
+        };
 
 
         override
@@ -23,9 +32,9 @@ namespace PocketDarkSouls
 
             if (this.HasSecondWord())
             {
-                    if (player.InventoryCommands.ContainsKey(this.SecondWord))
+                    if (InventoryCommands.ContainsKey(this.SecondWord))
                     {
-                        player.InventoryCommands[this.SecondWord].Execute(player,this.ThirdWord);
+                        InventoryCommands[this.SecondWord].Execute(player,this.ThirdWord);
                     }
                     else
                     {

@@ -281,5 +281,17 @@ public class DialogCreator
         return tmp;
     }
 
+    public List<Combat> MakeDialogSet_combat(string character_type)
+    {
+        List<Combat> tmp = new List<Combat>();
+        if (character_type == "goblin")
+        {
+            tmp.Add(new CombatAttack(dialog["goblin"]));
+            return tmp;
+        }
+        tmp.Add(new CombatAttack(dialog["neutral"]));
+        return tmp;
+    }
+
 
 }

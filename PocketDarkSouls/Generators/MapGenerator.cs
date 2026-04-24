@@ -6,7 +6,7 @@ public class MapGenerator
     private Dictionary<int, Dictionary<int, Room>> boss_rooms_cache             = new Dictionary<int, Dictionary<int, Room>>();            // segmented - could move to deep dictionary 
     private Dictionary<int, Dictionary<int, Room>> towns_rooms_cache            = new Dictionary<int, Dictionary<int, Room>>();
     private Dictionary<int, Dictionary<int, Room>> mine_rooms_cache             = new Dictionary<int, Dictionary<int, Room>>();
-    private Dictionary<int, Dictionary<int, Room>> artifact_rooms_cache         = new Dictionary<int, Dictionary<int, Room>>();
+    private Dictionary<int, Dictionary<int, Room>> gold_rooms_cache         = new Dictionary<int, Dictionary<int, Room>>();
     private Dictionary<int, Dictionary<int, Room>> trap_rooms_cache             = new Dictionary<int, Dictionary<int, Room>>();
     private Dictionary<int, Dictionary<int, Room>> Unstable_mine_rooms_cache    = new Dictionary<int, Dictionary<int, Room>>();
     
@@ -21,9 +21,6 @@ public class MapGenerator
     private string[] directions = { "north", "south", "east", "west" };
     CharacterCreator Character_Creator;
     private int LEVELS = 10;
-  
-
-    private double town_spawn_congestion = 0.3;
 
 
 
@@ -75,27 +72,27 @@ public class MapGenerator
         int roll = rand.Next(0, 1);
         switch (NPC_type)
         {
-            case "person":
+            case "person":                               // travelers - spawn in outskits of towns
                 if (roll == 0)
                 {
                     RollForTowns();
                 }
                 return RollForTownOutskits();
                 
-            case "beggar":
+            case "beggar":                               // beggars - spawn outside of towns
                 if (roll == 0)
                 {
                     RollForMines();
                 }
                 return RollForTownOutskits();
 
-            case "merchant":
+            case "merchant":                             // merchants - spawn in towns
                 return RollForTowns();
 
-            case "drunk":
+            case "drunk":                                // drunks - spawn in towns / taverns
                 return RollForTowns();
 
-            case "goblin":
+            case "goblin":                               // goblins - spawn in mines / traps
                 if (roll == 0)
                 {
                     return RollForTraps();
@@ -224,11 +221,11 @@ public class MapGenerator
 
         for (int levels_ = 0; levels_ < levels; levels_++)
         {
-            rooms_cache[levels_]                    = new Dictionary<int, Room>();
+            rooms_cache[levels_]                    = new Dictionary<int, Room>(); // main cache for all rooms / create on new level
             boss_rooms_cache[levels_]               = new Dictionary<int, Room>();
             towns_rooms_cache[levels_]              = new Dictionary<int, Room>();
             mine_rooms_cache[levels_]               = new Dictionary<int, Room>();
-            artifact_rooms_cache[levels_]           = new Dictionary<int, Room>();
+            gold_rooms_cache[levels_]           = new Dictionary<int, Room>();
             trap_rooms_cache[levels_]               = new Dictionary<int, Room>();
             Unstable_mine_rooms_cache[levels_]      = new Dictionary<int, Room>();
 
@@ -301,11 +298,11 @@ public class MapGenerator
 
         Dictionary<string, Action>  actions_  = new Dictionary<string, Action>(); 
 
-        if (type == "mine")
+        if (type == "goldmine")
         {
             actions_.Add("mining",new MineAction());
-            // search - returns things in the room like objects
-            // other stuff here
+            // in farms you can pick things up and sell them to merchants
+            // could add a farming action here that is similar to mining but has different rewards and durration
         }
         return actions_;
     }
@@ -346,7 +343,7 @@ public class MapGenerator
 
         if (roll >= .56 && roll < .57)  // 1% roll 
         {
-            type = "artifact";
+            type = "goldmine";
         }
 
         if (roll >= .57 && roll < .59)  // 2% roll 
@@ -407,7 +404,7 @@ public class MapGenerator
             case "mine": mine_rooms_cache[lvls][sprwl]                    = roomToCache; break;
             case "unstable_mine": Unstable_mine_rooms_cache[lvls][sprwl]  = roomToCache; break;
             case "trap": trap_rooms_cache[lvls][sprwl]                    = roomToCache; break;
-            case "artifact": artifact_rooms_cache[lvls][sprwl]            = roomToCache; break;
+            case "goldmine": gold_rooms_cache[lvls][sprwl]                = roomToCache; break;
         }
     }
 

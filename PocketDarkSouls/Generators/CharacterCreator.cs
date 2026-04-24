@@ -168,13 +168,8 @@ public class CharacterCreator
 
 
         // bind user only commands
-        List<Speak>  dialogCommands = dialogCreator.MakeDialogSet(type);
-        List<ICs> inventoryCommands = new List<ICs>();    // hook into commands for inventory - would need to be on all players if we can body swap ??  this gies you frontend acess to that characts inventory
-
-        inventoryCommands.Add(new InventoryOpen());
-        inventoryCommands.Add(new InventoryEquip());      // really only needs to load for user 
-        inventoryCommands.Add(new InventoryUnequip());    // AI should really just have acess withouth the command interfece 
-        inventoryCommands.Add(new InventoryUse());
+        List<Speak>  dialogCommands     = dialogCreator.MakeDialogSet(type);
+        //List<Combat> dialogCombat       = dialogCreator.MakeDialogSet_combat(type);
 
 
         Player character;
@@ -188,7 +183,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -205,7 +199,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -219,7 +212,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -232,7 +224,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -245,7 +236,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -259,7 +249,6 @@ public class CharacterCreator
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
                                                         main_inventory,     // internal system 
-                                                        inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                         Events,
                                                         wallet,             // internal system 
                                                         health,             // internal system
@@ -273,7 +262,6 @@ public class CharacterCreator
                                                        name,               // Character name
                                                        dialogCommands,     // custom dialog prompt hooking 
                                                        main_inventory,     // internal system 
-                                                       inventoryCommands,  // inventory command hooking ( user interface and AI hooking )
                                                        Events,
                                                        wallet,             // internal system 
                                                        health,             // internal system

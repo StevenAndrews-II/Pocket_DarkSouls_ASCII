@@ -15,7 +15,7 @@ public class SpeakCharity : Speak
     public void Execute(Player p1, Player p2)
     {
         p1.messenger.WarningMessage($"Speaking with : [ {p2.name} : {p2.GetType()} ] ", ConsoleColor.Blue);
-        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.GenericSpeach(this), ConsoleColor.Magenta);
+        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.GenericSpeach(this.Dialog), ConsoleColor.Magenta);
         while (true)  
         {   
             Console.WriteLine("Input gold total [ 0 to exit ]: ");
@@ -24,18 +24,18 @@ public class SpeakCharity : Speak
             {
                 if (result <= 0)
                 {
-                    p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.BadCharity(this,0), ConsoleColor.Magenta);
+                    p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.BadCharity(this.Dialog, 0), ConsoleColor.Magenta);
                     break;
                 }
                 else
                 {
                     if (!p1.wallet.GiveGold(result)) {
                         p1.messenger.ErrorMessage("You shouldnt be making enemies here...", ConsoleColor.Red);
-                        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.BadCharity(this,1), ConsoleColor.Magenta);
+                        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.BadCharity(this.Dialog,1), ConsoleColor.Magenta);
                         break;
                     }
                     p2.wallet.AddGold(result);
-                    p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.ThankYouSpeach(this), ConsoleColor.Magenta);
+                    p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.ThankYouSpeach(this.Dialog), ConsoleColor.Magenta);
                     break;
                 }
             }

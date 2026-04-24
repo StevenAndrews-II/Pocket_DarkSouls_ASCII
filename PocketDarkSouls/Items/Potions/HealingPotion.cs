@@ -9,12 +9,20 @@
         this.modifier = modifier;
     }
 
- 
+    /// <summary>
+    /// Consumes a specified amount of entity events.   
+    /// </summary>
+    /// <param name="events">The entity events to be consumed.</param>
+    /// <param name="amount">The number of "item" to consume.</param>
     public new void Consume(EntityEvents events, int amount)
     {
         this.Hook(events, amount);
     }
-
+    /// <summary>
+    /// Raises a heal event with the specified amount multiplied by the modifier.
+    /// </summary>
+    /// <param name="events">The entity events instance to raise the heal event on.</param>
+    /// <param name="amt">The base amount to be healed.</param>
     public override void Hook(EntityEvents events, int amt)
     {
         events.RaiseHeal(amt * modifier);

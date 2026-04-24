@@ -26,7 +26,7 @@ public class SpeakTrade : Speak
 
         if (forsale.Count > 0)
         {
-            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.TradeSpeach(this),ConsoleColor.Magenta);
+            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.TradeSpeach(this.Dialog),ConsoleColor.Magenta);
             
             
 
@@ -53,7 +53,7 @@ public class SpeakTrade : Speak
 
                     if (result < 0)
                     {
-                        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.QuitTrade(this),ConsoleColor.Magenta);
+                        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.QuitTrade(this.Dialog),ConsoleColor.Magenta);
                         return;
                     }
                 }
@@ -74,7 +74,7 @@ public class SpeakTrade : Speak
             
             if (p1.wallet.gold < purchase.price)
             {
-                p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NotEnoughToTrade(this), ConsoleColor.Magenta);
+                p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NotEnoughToTrade(this.Dialog), ConsoleColor.Magenta);
                 return;
             }
             else
@@ -88,12 +88,12 @@ public class SpeakTrade : Speak
         }
         else
         {
-            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NothingToTradeSpeach(this), ConsoleColor.Magenta);
+            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NothingToTradeSpeach(this.Dialog), ConsoleColor.Magenta);
             return;
         }
 
 
-        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.ThankYouSpeach(this), ConsoleColor.Magenta);
+        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.ThankYouSpeach(this.Dialog), ConsoleColor.Magenta);
         
     }
 }

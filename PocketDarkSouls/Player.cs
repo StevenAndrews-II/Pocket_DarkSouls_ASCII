@@ -23,7 +23,6 @@ namespace PocketDarkSouls
 
 
         public Dictionary<string, Speak> SpeakCommands { get; init; } = new Dictionary<string, Speak>();    
-        public Dictionary<string, ICs> InventoryCommands { get; init; } = new Dictionary<string, ICs>();
 
 
 
@@ -42,10 +41,9 @@ namespace PocketDarkSouls
         /// <param name="W_"                >The player's wallet.</param>
         /// <param name="H_"                >The player's health system.</param>
         /// <param name="room"              >The initial room the player is in.</param>
-        public Player(string name, List<Speak> dialog, Inventory I_, List<ICs> InventoryCommands , EntityEvents EventManager, Wallet W_, HealthSystem H_, Room room)
+        public Player(string name, List<Speak> dialog, Inventory I_, EntityEvents EventManager, Wallet W_, HealthSystem H_, Room room)
         {
             AddSpeakCommand(dialog);
-            AddInventoryCommand(InventoryCommands);
 
             this.main_inventory     = I_;
             this.wallet             = W_;
@@ -91,18 +89,8 @@ namespace PocketDarkSouls
                 SpeakCommands.Add(speak.keyword, speak);
             }
         }
-        /// <summary>
-        /// Adds inventory commands to the player's list of available commands, allowing them to interact with their inventory and the game world.
-        /// Should be called during player initialization to set up their inventory options.
-        /// </summary>
-        /// <param name="cmd"></param>
-        public void AddInventoryCommand(List<ICs> cmd)
-        {
-            foreach (ICs inv_cmd in cmd)
-            {
-                InventoryCommands.Add(inv_cmd.keyword, inv_cmd);
-            }
-        }
+
+
 
 
 
