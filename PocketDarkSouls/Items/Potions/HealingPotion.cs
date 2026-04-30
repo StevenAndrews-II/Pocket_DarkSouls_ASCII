@@ -13,12 +13,7 @@ public class HealingPotion : Potion
 
     protected override void Hook(Player user, int amt)
     {
-        user.EventManager.RaiseHeal(new HealEvent
-        {
-            Amount = amt * modifier,
-            Source = user,
-            Target = user
-        });
+        user.EventManager.RaiseHeal(new HealEvent(amt * modifier));
     }
 
     public override string ToString()

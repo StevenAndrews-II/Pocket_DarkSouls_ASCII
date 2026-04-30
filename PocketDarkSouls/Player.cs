@@ -48,7 +48,7 @@ namespace PocketDarkSouls
             AddSpeakCommand(dialog);
 
             this.wallet             = new Wallet(0,100000);
-            this.health             = new HealthSystem(this);
+            this.health             = new HealthSystem(this, EventManager);
             this.main_inventory     = new Inventory(this);
             this._currentRoom       = room;
             this.name               = name;

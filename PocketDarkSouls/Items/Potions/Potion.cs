@@ -13,8 +13,6 @@ public abstract class Potion : Item, IConsumable
             return;
         }
 
-        // ⚠️ NO quantity handling here (inventory does that)
-
         Hook(user, amount);
     }
 

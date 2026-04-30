@@ -30,10 +30,49 @@ public class HealthSystem
     private int potion_effect_amt       = 2;
 
 
-    public HealthSystem(Player player)
+    private EntityEvents events;
+
+    public HealthSystem(Player player, EntityEvents events)
     {
         this.Player = player;
+        this.events = events;
+
+        // Subscribe to events
+        events.OnHit += HandleHit;
+        events.OnHeal += HandleHeal;
     }
+
+
+    private void HandleHeal(HealEvent e)
+    {
+        reginerate(e.Amount);
+    }
+
+    private void HandleHit(HitEvent e)
+    {
+        // optional: apply defense logic here
+        int damage = e.Amount - physical_defense;
+        if (damage < 0) damage = 0;
+
+        Hit(damage);
+
+        // handle death // we may change this to a death event that other systems can subscribe to, for now we will just handle it here
+        if (!isAlive())
+        {
+            if (hasLives())
+            {
+                useLife();
+                respawn();
+            }
+            else
+            {
+                Console.WriteLine("You have failed to achieve your goals...");
+            }
+        }
+    }
+
+
+
 
     public void  UpdateDefenseStats(int p_,int f_,int m_) 
     {
