@@ -48,15 +48,14 @@ public class Inventory
     private const double LIMIT_equipment    = 70;
 
 
-    private readonly Wallet         wallet;
-    private readonly HealthSystem   HP;
+    //private readonly Wallet         wallet;
+    //private readonly HealthSystem   HP;
 
+    private readonly Player Player;
 
-
-    public Inventory(Wallet wallet,HealthSystem HP,double backpack_cap = 75 ,double equipment_cap = 25,double armor_cap = 25)
+    public Inventory(Player Player,double backpack_cap = 75 ,double equipment_cap = 25,double armor_cap = 25)
     {
-        this.wallet         = wallet;
-        this.HP             = HP;
+        this.Player = Player;
         this.backpack_cap   = backpack_cap;
         this.equipment_cap  = equipment_cap;
         this.armor_cap      = armor_cap;
@@ -437,7 +436,7 @@ public class Inventory
         if (consumable != null)
         {
             if (backpack[id].numberOf >= amt ) {
-                consumable.Consume(HP.HealthEvents, amt);
+                consumable.Consume(Player, amt);
                 DelItem(id, amt);
                 return true;
             }
@@ -535,8 +534,7 @@ public class Inventory
 
     public string ReadInventory()
     {
-        if (backpack.Count != 0)
-        {
+
             string tmp = "\n";
             if (armor.Count > 0)
             {
@@ -570,8 +568,6 @@ public class Inventory
                 }
             }
             return tmp;
-        }
-        return "Your inventory is empty...";
     }
 
 

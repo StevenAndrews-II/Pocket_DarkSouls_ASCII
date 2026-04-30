@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PocketDarkSouls;
 
 public interface IConsumable
 {
-    void Consume(EntityEvents events, int amount);
+    void Consume(Player user, int amount);
 }

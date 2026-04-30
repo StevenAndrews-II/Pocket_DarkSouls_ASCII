@@ -161,10 +161,10 @@ public class CharacterCreator
         // DI inject health system,and other systems here 
 
         EntityEvents Events             = new EntityEvents();
-        Wallet wallet                   = new Wallet(600, 100000); // make random for final presentation
-        HealthSystem health             = new HealthSystem(Events);
+        //Wallet wallet                   = new Wallet(600, 100000); // make random for final presentation
+        //HealthSystem health             = new HealthSystem(Events);
 
-        Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
+        //Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
 
 
         // bind user only commands
@@ -182,10 +182,10 @@ public class CharacterCreator
                 character = new Hero(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                        //main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -198,10 +198,10 @@ public class CharacterCreator
                character = new Merchant(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -211,10 +211,10 @@ public class CharacterCreator
                 character = new Beggar(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -223,10 +223,10 @@ public class CharacterCreator
                 character = new Drunk(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -235,10 +235,10 @@ public class CharacterCreator
                 character = new Person(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -248,10 +248,10 @@ public class CharacterCreator
                 character = new Goblin(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        wallet,             // internal system 
-                                                        health,             // internal system
+                                                        //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
@@ -261,10 +261,10 @@ public class CharacterCreator
                 character = new Person(
                                                        name,               // Character name
                                                        dialogCommands,     // custom dialog prompt hooking 
-                                                       main_inventory,     // internal system 
+                                                       // main_inventory,     // internal system 
                                                        Events,
-                                                       wallet,             // internal system 
-                                                       health,             // internal system
+                                                       //wallet,             // internal system 
+                                                       // health,             // internal system
 
                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                     );

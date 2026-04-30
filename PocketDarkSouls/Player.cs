@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
+using System.Numerics;
 
 namespace PocketDarkSouls
 {
@@ -9,7 +10,8 @@ namespace PocketDarkSouls
     {
 
         private Room _currentRoom = null;
-        public Room CurrentRoom { get { return _currentRoom; } set { _currentRoom = value; } }
+        public Room CurrentRoom { get { return _currentRoom; } set {    _currentRoom = value; } }
+
 
         public string type { get; init; }
 
@@ -41,13 +43,13 @@ namespace PocketDarkSouls
         /// <param name="W_"                >The player's wallet.</param>
         /// <param name="H_"                >The player's health system.</param>
         /// <param name="room"              >The initial room the player is in.</param>
-        public Player(string name, List<Speak> dialog, Inventory I_, EntityEvents EventManager, Wallet W_, HealthSystem H_, Room room)
+        public Player(string name, List<Speak> dialog, EntityEvents EventManager, Room room)
         {
             AddSpeakCommand(dialog);
 
-            this.main_inventory     = I_;
-            this.wallet             = W_;
-            this.health             = H_;
+            this.wallet             = new Wallet(0,100000);
+            this.health             = new HealthSystem(this);
+            this.main_inventory     = new Inventory(this);
             this._currentRoom       = room;
             this.name               = name;
             this.messenger          = new Messenger(this);
@@ -58,6 +60,10 @@ namespace PocketDarkSouls
         }
 
 
+        public void HandleSpeak(string secondWord, Player p1)
+        {
+
+        }
 
 
 
