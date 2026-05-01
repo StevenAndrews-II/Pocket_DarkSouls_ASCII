@@ -110,14 +110,14 @@ public class Messenger
 
     public void display_menu(ConsoleColor near, ConsoleColor stats)
     {
-        bool NM_check = p.messenger.Near_menu(near);
+        bool NM_check = Near_menu(near);
         if (NM_check)
         {
-            p.messenger.PlayerStats(stats, false);
+            PlayerStats(stats, false);
         }
         else
         {
-            p.messenger.PlayerStats(stats);
+            PlayerStats(stats);
         }
     }
 }

@@ -42,12 +42,21 @@ public class HealthSystem
         events.OnHeal += HandleHeal;
     }
 
-
+    /// <summary>
+    /// HandleHeal processes a HealEvent by calling the reginerate method to increase the player's health based on the amount specified in the event.
+    /// </summary>
+    /// <param name="e">The HealEvent containing the amount of health to be restored.</param>
     private void HandleHeal(HealEvent e)
     {
         reginerate(e.Amount);
     }
 
+
+    /// <summary>
+    /// HandleHit processes a HitEvent by applying the damage to the player's health after considering physical defense. It calculates the effective damage, 
+    /// applies it using the Hit method, and checks if the player is still alive. If the player has lives remaining, it uses a life and respawns; otherwise, it outputs a failure message.
+    /// </summary>
+    /// <param name="e">The HitEvent containing the amount of damage to be applied.</param>
     private void HandleHit(HitEvent e)
     {
         // optional: apply defense logic here

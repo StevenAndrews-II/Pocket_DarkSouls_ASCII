@@ -1,26 +1,16 @@
-﻿
+﻿using System;
 using PocketDarkSouls;
-public class InventoryUse : ICs
+public class SubMenus
 {
-    public string keyword { get; } = "use"; // comand to initate this section
 
-    public void Execute(Player p1, string? key = null)
+    public void UseItemMenu(Player p1, string? key = null)
     {
-
-        // need to move this to inventory class - OOP principles / requirements
-        // should be able to use items from the inventory menu - not just the main menu - also should be able to use items from the inventory menu in combat - not just the main menu
-
-
-
-
-
-
         // Window loop
         bool used = false;
         while (key != null)
         {
-            Console.WriteLine(p1.main_inventory.getItemInfo(key),ConsoleColor.White);
-            Console.WriteLine("Input an ammount to use:",ConsoleColor.White);
+            Console.WriteLine(p1.main_inventory.getItemInfo(key), ConsoleColor.White);
+            Console.WriteLine("Input an ammount to use:", ConsoleColor.White);
             string input = Console.ReadLine();
             if (int.TryParse(input, out int result))
             {
@@ -43,4 +33,9 @@ public class InventoryUse : ICs
             p1.messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
         }
     }
+
+
+
+
+
 }

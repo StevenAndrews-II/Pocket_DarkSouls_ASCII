@@ -15,13 +15,13 @@ namespace PocketDarkSouls
 
         public string type { get; init; }
 
-        public Inventory        main_inventory; 
-        public Wallet           wallet;
-        public HealthSystem     health;
-        public DialogHandler    dialogHandler;
-        public Messenger        messenger;
+        public Inventory        main_inventory { get; private init; } 
+        public Wallet           wallet { get; private init; }
+        public HealthSystem     health { get; private init; }
+        public DialogHandler    dialogHandler { get; private init; }
+        public Messenger        messenger { get; private init; } 
 
-        public EntityEvents     EventManager;
+        public EntityEvents     EventManager { get; private init; }
 
 
         public Dictionary<string, Speak> SpeakCommands { get; init; } = new Dictionary<string, Speak>();    

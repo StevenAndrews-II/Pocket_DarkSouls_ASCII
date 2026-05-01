@@ -76,7 +76,7 @@ public class CharacterCreator
             }
             else
             {
-                if (v is not Hero)
+                if (v is not Hero) // only remove non-hero players that have died, the hero can be respawned and is essential to the game loop
                 {
                     RemovePlayer(k);
                 }
@@ -158,17 +158,11 @@ public class CharacterCreator
         }
 
 
-        // DI inject health system,and other systems here 
+        // DI inject custom dialog sets based on type - this allows for easy expansion of dialog options and character types without needing to modify the core player class or the character creator class
+        // add events to the player and pass them to the dialog sets so they can hook into them for advanced dialog options ( like healing the player or giving them an item )
 
-        EntityEvents Events             = new EntityEvents();
-        //Wallet wallet                   = new Wallet(600, 100000); // make random for final presentation
-        //HealthSystem health             = new HealthSystem(Events);
-
-        //Inventory main_inventory        = new Inventory(wallet, health); // pass wallet and health - potions / stims / loot packs add buffs to sub systems after use...
-
-
-        // bind user only commands
-        List<Speak>  dialogCommands     = dialogCreator.MakeDialogSet(type);
+        EntityEvents Events               = new EntityEvents();
+        List<Speak>  dialogCommands       = dialogCreator.MakeDialogSet(type);
         //List<Combat> dialogCombat       = dialogCreator.MakeDialogSet_combat(type);
 
 
@@ -182,11 +176,7 @@ public class CharacterCreator
                 character = new Hero(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                        //main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 Loot(character,1);
@@ -198,11 +188,7 @@ public class CharacterCreator
                character = new Merchant(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 Loot(character,3);
@@ -211,11 +197,7 @@ public class CharacterCreator
                 character = new Beggar(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 break;
@@ -223,11 +205,7 @@ public class CharacterCreator
                 character = new Drunk(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 break;
@@ -235,11 +213,7 @@ public class CharacterCreator
                 character = new Person(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 Loot(character,1);
@@ -248,11 +222,7 @@ public class CharacterCreator
                 character = new Goblin(
                                                         name,               // Character name 
                                                         dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                         Events,
-                                                        //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                         null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                      );
                 Loot(character,2);
@@ -261,11 +231,7 @@ public class CharacterCreator
                 character = new Person(
                                                        name,               // Character name
                                                        dialogCommands,     // custom dialog prompt hooking 
-                                                       // main_inventory,     // internal system 
                                                        Events,
-                                                       //wallet,             // internal system 
-                                                       // health,             // internal system
-
                                                        null                // current room / spawn room ( null at first - assigned by SpawnWarp() ) 
                                                     );
                 break;
