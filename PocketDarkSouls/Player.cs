@@ -47,7 +47,7 @@ namespace PocketDarkSouls
         {
             AddSpeakCommand(dialog);
 
-            this.wallet             = new Wallet(0,100000);
+            this.wallet             = new Wallet(500,100000);
             this.health             = new HealthSystem(this, EventManager);
             this.main_inventory     = new Inventory(this);
             this._currentRoom       = room;
@@ -96,6 +96,43 @@ namespace PocketDarkSouls
             }
         }
 
+
+
+
+        //-----------------------------------------------------------------------------------------
+        // menu
+        //-----------------------------------------------------------------------------------------
+
+        public void UseItemMenu(string key)
+        {
+            bool used = false;
+            while (key != null)
+            {
+                Console.WriteLine(main_inventory.getItemInfo(key), ConsoleColor.White);
+                Console.WriteLine("Input an ammount to use:", ConsoleColor.White);
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int result))
+                {
+                    if (result <= 0)
+                    {
+                        Console.WriteLine("Canceled...", ConsoleColor.Red);
+                        break;
+                    }
+                    else
+                    {
+                        used = main_inventory.useItem(key, result);
+                        break;
+                    }
+                }
+                Console.Clear();
+            }
+
+            if (!used)
+            {
+                messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
+            }
+        }
+    
 
 
 

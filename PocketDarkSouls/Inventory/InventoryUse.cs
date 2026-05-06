@@ -6,41 +6,12 @@ public class InventoryUse : ICs
 
     public void Execute(Player p1, string? key = null)
     {
-
-        // need to move this to inventory class - OOP principles / requirements
-        // should be able to use items from the inventory menu - not just the main menu - also should be able to use items from the inventory menu in combat - not just the main menu
-
-
-
-
-
-
-        // Window loop
-        bool used = false;
-        while (key != null)
+        if (key != null)
         {
-            Console.WriteLine(p1.main_inventory.getItemInfo(key),ConsoleColor.White);
-            Console.WriteLine("Input an ammount to use:",ConsoleColor.White);
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int result))
-            {
-                if (result <= 0)
-                {
-                    Console.WriteLine("Canceled...", ConsoleColor.Red);
-                    break;
-                }
-                else
-                {
-                    used = p1.main_inventory.useItem(key, result);
-                    break;
-                }
-            }
-            Console.Clear();
+            p1.UseItemMenu(key);
         }
-
-        if (!used)
-        {
-            p1.messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
+        else{
+            Console.WriteLine("Use what? ...");
         }
     }
 }
