@@ -18,7 +18,7 @@ public class HealingPotion : Potion
     /// <param name="amt">The base amount of healing to apply.</param>
     protected override void Hook(Player user, int amt)
     {
-        user.EventManager.RaiseHeal(new HealEvent(amt * modifier));
+        user.Events.Raise(new HealEvent(amt * modifier));
     }
     /// <summary>
     /// ToString provides a string representation of the HealingPotion, including its id, weight, price, healing modifier, and quantity.

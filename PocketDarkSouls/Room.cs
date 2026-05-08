@@ -55,12 +55,12 @@ namespace PocketDarkSouls
         // entered room and exit room notification 
         public void PlayerHasEnteredRoom(Player player_)
         {
-            players_in_room.Add(player_.name, player_);
+            players_in_room.Add(player_.Name, player_);
         }
 
         public void PlayerHasLeftRoom(Player player_)
         {
-            players_in_room.Remove(player_.name);
+            players_in_room.Remove(player_.Name);
         }
 
 
@@ -137,7 +137,7 @@ namespace PocketDarkSouls
         }
 
 
-        public string GetNearByPlayers(string name)
+        public string GetNearByPlayers(string Name)
         {
             List<List<string>> occupancylist = OccupancyToList();
             string list_ = "";
@@ -147,7 +147,7 @@ namespace PocketDarkSouls
             }
             foreach (List<string> index in occupancylist)
             {
-                if (index[0] != name)
+                if (index[0] != Name)
                 {
                     list_ += $"\n{index[0],-20} : {index[1]}";
                 }

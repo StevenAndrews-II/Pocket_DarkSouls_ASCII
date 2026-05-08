@@ -39,11 +39,11 @@ public class Merchant : Player
     private void InventoryFlipping()
     {
         // get 5 items ( if we have em, and list them for sale 
-        List<Item> forsale = main_inventory.getAllItemsMarkedForSale();
+        List<Item> forsale = Inventory.getAllItemsMarkedForSale();
 
         if (forsale.Count == 0)
         {
-            main_inventory.FindAndMarkItemsToSell(2,dice.Next(5,10));
+            Inventory.FindAndMarkItemsToSell(2,dice.Next(5,10));
         }
     }
 
@@ -55,7 +55,7 @@ public class Merchant : Player
         int motion_roll = dice.Next(0, 5);
         if (motion_roll == 1)
         {
-            goTo(dir_[roll]);
+            GoTo(dir_[roll]);
         }
     }
 

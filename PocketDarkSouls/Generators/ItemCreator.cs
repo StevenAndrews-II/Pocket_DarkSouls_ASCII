@@ -87,7 +87,9 @@ public class ItemCreator
         switch (type)
         {
             case "sword":
-                return Weapon_Maker("Sword", rarity);
+                return Weapon_Maker("Sword", rarity,2,10);
+            case "bow":
+                return Weapon_Maker("Bow", rarity, 10, 200);
             case "helmet":
                 return Armor_Maker("Helmet", rarity);
             case "chestplate":
@@ -184,8 +186,14 @@ public class ItemCreator
     // weapons maker
     //-------------------------------------------------------------------------------------------------------------
 
-    private Item Weapon_Maker(string type, int rarity)
+    private Item Weapon_Maker(string type, int rarity,int minDist, int maxDist)
     {
+
+        if (minDist >= maxDist )
+        {
+            throw new ArgumentException($"Max distance must be greater than min distance. Provided values: minDist={minDist}, maxDist={maxDist}");
+        }
+
         if (rarity < 0 || rarity > 3)
         {
             throw new ArgumentException($"Rarity must be between 0 and 3. Provided value: {rarity}  ");
@@ -205,6 +213,10 @@ public class ItemCreator
 
         double weight_roll      = 0;
         double price_roll       = 0;
+
+        int rangeDist           = maxDist - minDist;
+        int rarityBase          = (rangeDist / 3);
+
         switch (special_roll)
         {
             case 0:
@@ -213,7 +225,8 @@ public class ItemCreator
                 first                   = Swords_first_low[first_name_roll];
                 second                  = Swords_second[second_name_roll];
 
-                range_roll              = dice.Next(5, 30);
+
+                range_roll              = dice.Next(minDist, rarityBase + minDist);
                 physical_roll           = dice.Next(5, 30);
                 fire_roll               = dice.Next(5, 30);
                 magic_roll              = dice.Next(5, 30);
@@ -227,7 +240,7 @@ public class ItemCreator
                 first                   = Swords_first_mid[first_name_roll];
                 second                  = Swords_second[second_name_roll];
 
-                range_roll              = dice.Next(5, 30);
+                range_roll              = dice.Next(minDist,(rarityBase*2) + minDist);
                 physical_roll           = dice.Next(30, 60);
                 fire_roll               = dice.Next(30, 60);
                 magic_roll              = dice.Next(30, 60);
@@ -242,7 +255,7 @@ public class ItemCreator
                 first                   = Swords_first_high[first_name_roll];
                 second                  = Swords_second[second_name_roll];
 
-                range_roll              = dice.Next(5, 30);
+                range_roll              = dice.Next(minDist, maxDist);
                 physical_roll           = dice.Next(60, 250);
                 fire_roll               = dice.Next(60, 250);
                 magic_roll              = dice.Next(60, 250);
@@ -263,6 +276,10 @@ public class ItemCreator
                 return _;
             case "Axe":
                 _ = new Axe(name, 1, weight_roll, price_roll, range_roll, physical_roll, fire_roll , magic_roll);
+                update_cache(name, _);
+                return _;
+            case "Bow":
+                _ = new Bow(name, 1, weight_roll, price_roll, range_roll, physical_roll, fire_roll, magic_roll);
                 update_cache(name, _);
                 return _;
             default: return null;

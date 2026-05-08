@@ -69,7 +69,7 @@ public class Messenger
     public void SendMessage(string message, ConsoleColor select)
     {
 
-        out_.TryAdd($"[{p.name}] : " + message, select);
+        out_.TryAdd($"[{p.Name}] : " + message, select);
 
     }
 
@@ -80,7 +80,7 @@ public class Messenger
 
     private bool Near_menu(ConsoleColor select)
     {
-        string nearby = p.CurrentRoom.GetNearByPlayers(p.name);
+        string nearby = p.CurrentRoom.GetNearByPlayers(p.Name);
         if (nearby != "")
         {
             string _    = "\n - - - - - - - - - - - - - - - - - - - - - - - - - -   " +
@@ -99,8 +99,8 @@ public class Messenger
         if (top){
             _ = line;
         }
-        _ += $"\n{p.main_inventory.getInfo()}" +
-            $"\nHP:{p.health.GetHealthStatus()} | Gold:{p.wallet.GetGoldInWallet()}";
+        _ += $"\n{p.Inventory.getInfo()}" +
+            $"\nHP:{p.Health.GetHealthStatus()} | Gold:{p.Wallet.GetGoldInWallet()}";
         if (bottom)
         {
             _ += line;

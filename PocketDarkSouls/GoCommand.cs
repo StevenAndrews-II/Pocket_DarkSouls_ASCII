@@ -17,11 +17,11 @@ namespace PocketDarkSouls
         {
             if (this.HasSecondWord())
             {
-                player.goTo(this.SecondWord);
+                player.GoTo(this.SecondWord);
             }
             else
             {
-                player.messenger.ErrorMessage("\nGo Where?", ConsoleColor.Red);
+                player.Messenger.ErrorMessage("\nGo Where?", ConsoleColor.Red);
             }
             return false;
         }

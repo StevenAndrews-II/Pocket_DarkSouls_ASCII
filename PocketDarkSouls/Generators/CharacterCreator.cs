@@ -70,9 +70,9 @@ public class CharacterCreator
     {
         foreach (var (k,v) in players)
         {
-            if (v.health.isAlive())
+            if (v.Health.isAlive())
             {
-                v.update();
+                v.Update();
             }
             else
             {
@@ -257,7 +257,7 @@ public class CharacterCreator
 
         for (int i = 0; i < numberOf_roll; i++)
         {
-            type_roll = rand.Next(0, 4);
+            type_roll = rand.Next(0, 5);
             string type = "";
             switch (type_roll)
             {
@@ -274,11 +274,16 @@ public class CharacterCreator
                 case 3:
                     type = "HP";
                     break;
+                case 4:
+                    type = "bow";
+                    break;
                 default: 
                     type = "sword";
                     break;
             }
 
+            // if rarity is not specified, roll for it randomly, otherwise use the specified rarity
+            // ( this allows for more control over loot generation for certain character types, like merchants having higher rarity items )
             if (rarity < 0  || rarity > 3)
             {
                 rarity = rand.Next(0, 4);
@@ -287,10 +292,10 @@ public class CharacterCreator
 
             _ = itemCreator.Generate(type, rarity);
             if (_!=null) {
-                p.main_inventory.AddItem(_);
+                p.Inventory.AddItem(_);
             }
         }
-        p.main_inventory.RandomEquip();
+        p.Inventory.RandomEquip();
     }
 
 }

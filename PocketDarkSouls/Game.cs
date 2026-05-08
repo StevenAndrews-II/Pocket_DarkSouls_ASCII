@@ -78,14 +78,14 @@ namespace PocketDarkSouls
                     Character_Creator.update(); // internal updater for all players/NPC sub systems 
 
                     // death and restart screen 
-                    if (!_player.health.isAlive())
+                    if (!_player.Health.isAlive())
                     {
-                        _player.messenger.ErrorMessage("You have faild to reclaim yourself..." , ConsoleColor.Red);
-                        _player.messenger.ErrorMessage("Press Enter...", ConsoleColor.DarkRed);
+                        _player.Messenger.ErrorMessage("You have faild to reclaim yourself..." , ConsoleColor.Red);
+                        _player.Messenger.ErrorMessage("Press Enter...", ConsoleColor.DarkRed);
                         string ok = Console.ReadLine();
 
                         // retart or respawn
-                        if (!_player.health.useLife())              // decrement and check
+                        if (!_player.Health.useLife())              // decrement and check
                         {
                             // new game - clear players list / generate new map + NPCs / respawn player in new location
                             Character_Creator.RemoveAllplayers();
@@ -96,26 +96,26 @@ namespace PocketDarkSouls
                         else
                         {
                             mapGenerator.GetRandomRoomByLevel(0);   // respawn at the bottom 
-                            _player.health.respawn();               // respawn health to max health 
+                            _player.Health.respawn();               // respawn Health to max health 
                         }
                     }
 
 
                     // GUI Hook / Render stats - for selected player
-                    _player.messenger.InfoMessage($"\n[{_player.name} : {_player.GetType()}]", ConsoleColor.Cyan);
-                    _player.messenger.display_menu(ConsoleColor.Yellow,ConsoleColor.DarkYellow);
-                    _player.messenger.NormalMessage("\n" + _player.CurrentRoom.Description(), ConsoleColor.DarkYellow);
-                    _player.messenger.draw(); // render players GUI
+                    _player.Messenger.InfoMessage($"\n[{_player.Name} : {_player.GetType()}]", ConsoleColor.Cyan);
+                    _player.Messenger.display_menu(ConsoleColor.Yellow,ConsoleColor.DarkYellow);
+                    _player.Messenger.NormalMessage("\n" + _player.CurrentRoom.Description(), ConsoleColor.DarkYellow);
+                    _player.Messenger.draw(); // render players GUI
 
 
                     Console.Write("\n>");
                     Command command = _parser.ParseCommand(Console.ReadLine());
                     Console.Clear();           // clear console
-                    _player.messenger.Clear(); // clear draw buffer 
+                    _player.Messenger.Clear(); // clear draw buffer 
 
                     if (command == null)
                     {   
-                        _player.messenger.ErrorMessage("I don't understand...", ConsoleColor.Red);
+                        _player.Messenger.ErrorMessage("I don't understand...", ConsoleColor.Red);
                     }
                     else
                     {
@@ -131,21 +131,21 @@ namespace PocketDarkSouls
         public void Start()
         {
             _playing = true;
-            _player.messenger.InfoMessage(Welcome()+ IntroMessage, ConsoleColor.Blue);
+            _player.Messenger.InfoMessage(Welcome()+ IntroMessage, ConsoleColor.Blue);
         }
 
         public void End()
         {
             _playing = false;
-            //_player.messenger.InfoMessage(Goodbye());
-            _player.messenger.InfoMessage(Goodbye(), ConsoleColor.Blue);
+            //_player.Messenger.InfoMessage(Goodbye());
+            _player.Messenger.InfoMessage(Goodbye(), ConsoleColor.Blue);
         }
 
 
 
         public string Welcome()
         {
-            return $"Ahh... so you awaken once more, {_player.name}";
+            return $"Ahh... so you awaken once more, {_player.Name}";
         }
 
         public string Goodbye()

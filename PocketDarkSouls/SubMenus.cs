@@ -9,7 +9,7 @@ public class SubMenus
         bool used = false;
         while (key != null)
         {
-            Console.WriteLine(p1.main_inventory.getItemInfo(key), ConsoleColor.White);
+            Console.WriteLine(p1.Inventory.getItemInfo(key), ConsoleColor.White);
             Console.WriteLine("Input an ammount to use:", ConsoleColor.White);
             string input = Console.ReadLine();
             if (int.TryParse(input, out int result))
@@ -21,7 +21,7 @@ public class SubMenus
                 }
                 else
                 {
-                    used = p1.main_inventory.useItem(key, result);
+                    used = p1.Inventory.useItem(key, result);
                     break;
                 }
             }
@@ -30,7 +30,7 @@ public class SubMenus
 
         if (!used)
         {
-            p1.messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
+            p1.Messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
         }
     }
 

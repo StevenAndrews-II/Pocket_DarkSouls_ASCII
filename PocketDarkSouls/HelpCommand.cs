@@ -22,11 +22,11 @@ namespace PocketDarkSouls
         {
             if (this.HasSecondWord())
             {
-                player.messenger.WarningMessage("\nI cannot help you with " + this.SecondWord, ConsoleColor.Yellow);
+                player.Messenger.WarningMessage("\nI cannot help you with " + this.SecondWord, ConsoleColor.Yellow);
             }
             else
             {
-                player.messenger.InfoMessage("\nYou are lost... You are alone... You seak penenace with the Gods.. " + _words.Description(), ConsoleColor.Blue);
+                player.Messenger.InfoMessage("\nYou are lost... You are alone... You seak penenace with the Gods.. " + _words.Description(), ConsoleColor.Blue);
             }
             return false;
         }

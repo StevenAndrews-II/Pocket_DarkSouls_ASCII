@@ -1,4 +1,6 @@
 ﻿
+using PocketDarkSouls;
+
 public abstract class Weapon : Item
 {
     public int damage { get; init; }

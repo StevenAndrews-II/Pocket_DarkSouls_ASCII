@@ -26,7 +26,7 @@ public class Drunk : Player
     //----------------------------------------------------------
     public override void AI()
     {
-        if (health.isAlive())
+        if (Health.isAlive())
         {
             Roaming();
         }
@@ -39,7 +39,7 @@ public class Drunk : Player
         int motion_roll = dice.Next(0, 10); // moves slow
         if (motion_roll == 1)
         {
-            goTo(dir_[roll]);
+            GoTo(dir_[roll]);
         }
     }
 }

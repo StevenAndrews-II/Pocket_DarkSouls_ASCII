@@ -29,7 +29,7 @@ namespace PocketDarkSouls
             }
             else
             {
-                player.messenger.ErrorMessage("\nFight whom?", ConsoleColor.Red);
+                player.Messenger.ErrorMessage("\nFight whom?", ConsoleColor.Red);
             }
             return false;
         }

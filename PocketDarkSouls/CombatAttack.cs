@@ -13,7 +13,7 @@ public class CombatAttack : Combat
 
     public void Execute(Player p1, Player p2)
     {
-        p1.messenger.WarningMessage($"In combat with : [ {p2.name} : {p2.GetType()} ] ", ConsoleColor.DarkRed);
+        p1.Messenger.WarningMessage($"In combat with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.DarkRed);
        
 
         

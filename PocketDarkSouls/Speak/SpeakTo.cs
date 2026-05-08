@@ -16,8 +16,8 @@ public class SpeakTo : Speak
 	// P2 = the one who is being spoken to
     public void Execute(Player p1,Player p2)
 	{
-		p1.messenger.WarningMessage($"Speaking with : [ {p2.name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
-        // hooks p2s dialog handler to p1s messenger and sends random message in the dialog list
-        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.GenericSpeach(this.Dialog),ConsoleColor.Magenta);
+		p1.Messenger.WarningMessage($"Speaking with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
+        // hooks p2s dialog handler to p1s Messenger and sends random message in the dialog list
+        p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.GenericSpeach(this.Dialog),ConsoleColor.Magenta);
 	}
 }

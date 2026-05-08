@@ -36,7 +36,7 @@ public class Person : Player
         int motion_roll = dice.Next(0, 5);
         if (motion_roll == 1)
         {
-            goTo(dir_[roll]);
+            GoTo(dir_[roll]);
         }
     }
 }

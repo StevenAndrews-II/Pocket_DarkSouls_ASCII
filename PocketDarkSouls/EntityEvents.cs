@@ -21,8 +21,8 @@ namespace PocketDarkSouls
 
             if (!_listeners.TryGetValue(eventType, out List<Delegate>? handlers)) 
             {
-                handlers = new List<Delegate>();
-                _listeners[eventType] = handlers;
+                handlers                = new List<Delegate>();
+                _listeners[eventType]   = handlers;
             } 
 
             handlers.Add(handler);

@@ -24,12 +24,12 @@ namespace PocketDarkSouls
                         player.CurrentRoom.Actions[this.SecondWord].Execute();
                         return false;
                     }
-                    player.messenger.WarningMessage($"\nYou shall not do '{this.SecondWord}' in this location... ", ConsoleColor.DarkYellow);
+                    player.Messenger.WarningMessage($"\nYou shall not do '{this.SecondWord}' in this location... ", ConsoleColor.DarkYellow);
                 }
             }
             else
             {
-                player.messenger.WarningMessage("\nDo what?", ConsoleColor.DarkYellow);
+                player.Messenger.WarningMessage("\nDo what?", ConsoleColor.DarkYellow);
             }
             return false;
         }

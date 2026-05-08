@@ -38,14 +38,14 @@ namespace PocketDarkSouls
                     }
                     else
                     {
-                        player.messenger.WarningMessage("\nCant do that... ", ConsoleColor.Yellow);
+                        player.Messenger.WarningMessage("\nCant do that... ", ConsoleColor.Yellow);
                     }
                 
                 return false;
             }
             else
             {
-                player.messenger.WarningMessage("\nWhat was I doing?...", ConsoleColor.Yellow);
+                player.Messenger.WarningMessage("\nWhat was I doing?...", ConsoleColor.Yellow);
             }
             return false;
         }

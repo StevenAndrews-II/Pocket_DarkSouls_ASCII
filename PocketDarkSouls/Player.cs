@@ -1,215 +1,206 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace PocketDarkSouls
 {
-
+    /// <summary>
+    /// Base player class - handles core systems like inventory, health, wallet, and world interaction.
+    /// Designed as a composition-based entity container rather than a logic-heavy class.
+    /// </summary>
     public abstract class Player
     {
 
-        private Room _currentRoom = null;
-        public Room CurrentRoom { get { return _currentRoom; } set {    _currentRoom = value; } }
+        public Room CurrentRoom { get; private set; }
 
 
-        public string type { get; init; }
-
-        public Inventory        main_inventory { get; private init; } 
-        public Wallet           wallet { get; private init; }
-        public HealthSystem     health { get; private init; }
-        public DialogHandler    dialogHandler { get; private init; }
-        public Messenger        messenger { get; private init; } 
-
-        public EntityEvents     EventManager { get; private init; }
+        public string Name { get; }
 
 
-        public Dictionary<string, Speak> SpeakCommands { get; init; } = new Dictionary<string, Speak>();    
+        public string Type { get; init; }
+
+        //-----------------------------------------------------------------------------------------
+        // CORE SYSTEMS (COMPOSITION)
+        //-----------------------------------------------------------------------------------------
+
+        public Inventory Inventory { get; }
 
 
+        public Wallet Wallet { get; }
 
 
-        public string name { get; init; }
+        public HealthSystem Health { get; }
+
+        public DialogHandler DialogHandler { get; }
 
 
-        /// <summary>
-        /// Player constructor, initializes the player's name, inventory, wallet, health system, dialog options, and event manager.
-        /// </summary>
-        /// <param name="name"              >The name of the player.</param>
-        /// <param name="dialog"            >A list of dialogue options available to the player.</param>
-        /// <param name="I_"                >The player's inventory.</param>
-        /// <param name="InventoryCommands" >A list of inventory commands available to the player.</param>
-        /// <param name="EventManager"      >The event manager for handling game events.</param>
-        /// <param name="W_"                >The player's wallet.</param>
-        /// <param name="H_"                >The player's health system.</param>
-        /// <param name="room"              >The initial room the player is in.</param>
-        public Player(string name, List<Speak> dialog, EntityEvents EventManager, Room room)
+        public Messenger Messenger { get; }
+
+        public EntityEvents Events { get; }
+
+        //-----------------------------------------------------------------------------------------
+        // DIALOG / INTERACTION SYSTEM
+        //-----------------------------------------------------------------------------------------
+
+        private readonly Dictionary<string, Speak> _speakCommands = new();
+
+
+        public Player(
+            string name,
+            List<Speak> dialog,
+            EntityEvents events,
+            Room startingRoom)
         {
-            AddSpeakCommand(dialog);
+            Name            = name;
+            Events          = events;
 
-            this.wallet             = new Wallet(500,100000);
-            this.health             = new HealthSystem(this, EventManager);
-            this.main_inventory     = new Inventory(this);
-            this._currentRoom       = room;
-            this.name               = name;
-            this.messenger          = new Messenger(this);
-            this.dialogHandler      = new DialogHandler();
-            this.EventManager       = EventManager; 
+            Wallet          = new Wallet(500, 100000);
+            Inventory       = new Inventory(this);
+            Health          = new HealthSystem(this, events);
+            DialogHandler   = new DialogHandler();
+            Messenger       = new Messenger(this);
 
+            CurrentRoom     = startingRoom;
 
+            AddSpeakCommands(dialog);
         }
 
-
-        public void HandleSpeak(string secondWord, Player p1)
-        {
-
-        }
-
-
+        //-----------------------------------------------------------------------------------------
+        // UPDATE LOOP
+        //-----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Internal update function - should be called in the main game loop, handles time based effects and AI for non player characters.
+        /// Called every game tick. Updates all player systems.
         /// </summary>
-        public void update()
+        public void Update()
         {
-            health.update();
-            wallet.update();
+            Health.update();
+            Wallet.update();
             AI();
         }
 
         /// <summary>
-        /// Abstract optional function for AI behavior, should be overridden in non player character classes to define their behavior. Called in the update loop.
+        /// Override for AI behavior in non-player implementations.
         /// </summary>
         public virtual void AI() { }
 
+        //-----------------------------------------------------------------------------------------
+        // SPEAK SYSTEM
+        //-----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Adds speak commands to the player's list of available commands, allowing them to interact with the game world through dialogue.
-        /// Should be called during player initialization to set up their dialogue options.
+        /// Adds speak commands from a list into the player's command dictionary.
         /// </summary>
-        /// <param name="cmd"></param>
-        public void AddSpeakCommand(List<Speak> cmd)
+        private void AddSpeakCommands(List<Speak> commands)
         {
-            foreach (Speak speak in cmd)
+            foreach (var speak in commands)
             {
-                SpeakCommands.Add(speak.keyword, speak);
+                _speakCommands[speak.keyword] = speak;
             }
         }
 
+        /// <summary>
+        /// Looks up a speak command by keyword.
+        /// </summary>
+        public Speak? LookUpSpeakCommand(string key)
+        {
+            if (_speakCommands.TryGetValue(key, out var speak))
+                return speak;
 
-
+            return null;
+        }
 
         //-----------------------------------------------------------------------------------------
-        // menu
+        // ITEM SYSTEM
         //-----------------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Simple console-based item usage menu.
+        /// </summary>
         public void UseItemMenu(string key)
         {
             bool used = false;
+
             while (key != null)
             {
-                Console.WriteLine(main_inventory.getItemInfo(key), ConsoleColor.White);
-                Console.WriteLine("Input an ammount to use:", ConsoleColor.White);
+                Console.WriteLine(Inventory.getItemInfo(key));
+                Console.WriteLine("Input an amount to use:");
+
                 string input = Console.ReadLine();
-                if (int.TryParse(input, out int result))
+
+                if (int.TryParse(input, out int amount))
                 {
-                    if (result <= 0)
+                    if (amount <= 0)
                     {
-                        Console.WriteLine("Canceled...", ConsoleColor.Red);
+                        Console.WriteLine("Canceled...");
                         break;
                     }
-                    else
-                    {
-                        used = main_inventory.useItem(key, result);
-                        break;
-                    }
+
+                    used = Inventory.useItem(key, amount);
+                    break;
                 }
+
                 Console.Clear();
             }
 
             if (!used)
             {
-                messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
+                Messenger.WarningMessage("Item could not be used..", ConsoleColor.Red);
             }
         }
-    
 
-
-
-
-
-        /// <summary>
-        /// Looks up a speak command by its keyword, returning the corresponding Speak object if found, or null if not found.
-        /// </summary>
-        /// <param name="key">The keyword of the speak command to look up.</param>
-        /// <returns>The corresponding Speak object if found; otherwise, null.</returns>
-        public Speak? LookUpSpeakCommand(string key)
-        {
-            if (SpeakCommands.ContainsKey(key))
-            {
-                return SpeakCommands[key];
-            }
-            return null;
-        }
-
-
+        //-----------------------------------------------------------------------------------------
+        // PLAYER INFO
+        //-----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets basic information about the player, such as their name and type, and returns it as a list of strings.
-        /// This can be used for display purposes or other game mechanics that require player information.
+        /// Returns basic player information for UI/debugging.
         /// </summary>
-        /// <returns></returns>
         public List<string> GetInfo()
         {
-            var info = new List<string>();
-            info.Add(name);
-            info.Add(this.GetType().Name);
-            return info;
+            return new List<string>
+            {
+                Name,
+                GetType().Name
+            };
         }
 
-
         //-----------------------------------------------------------------------------------------
-        // motion 
+        // MOVEMENT SYSTEM
         //-----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Spawns the player into a specified room, handling the necessary logic for leaving the current room and entering the new room.
+        /// Warps player directly into a room.
         /// </summary>
-        /// <param name="room">The room to spawn the player into.</param>
-        public void SpawnWarp(Room room) // push to room 
+        public void SpawnWarp(Room room)
         {
             if (CurrentRoom != null)
             {
-                CurrentRoom.PlayerHasLeftRoom(this); // leave old room
+                CurrentRoom.PlayerHasLeftRoom(this);
             }
+
             if (room != null)
             {
-                room.PlayerHasEnteredRoom(this); // enter next 
-                this._currentRoom = room;        // set the ref 
+                CurrentRoom = room;
+                room.PlayerHasEnteredRoom(this);
             }
         }
 
-
         /// <summary>
-        /// Moves the player to a new room in the specified direction, if an exit exists in that direction.
-        /// Handles the necessary logic for leaving the current room and entering the new room, and provides feedback if no exit exists in the specified direction.
+        /// Moves player through a directional exit if available.
         /// </summary>
-        /// <param name="direction"></param>
-        public void goTo(string direction)
+        public void GoTo(string direction)
         {
             Room nextRoom = CurrentRoom.GetExit(direction);
+
             if (nextRoom != null)
             {
-
-
-                CurrentRoom.PlayerHasLeftRoom(this); // leave old room 
-                nextRoom.PlayerHasEnteredRoom(this); // enter next 
-                CurrentRoom = nextRoom;              // set ref inside player
-
+                CurrentRoom.PlayerHasLeftRoom(this);
+                nextRoom.PlayerHasEnteredRoom(this);
+                CurrentRoom = nextRoom;
             }
             else
             {
-                messenger.ErrorMessage("\nThere is no path " + direction, ConsoleColor.Red);
+                Messenger.ErrorMessage("There is no path " + direction, ConsoleColor.Red);
             }
         }
     }

@@ -554,7 +554,8 @@ public class Inventory
 
                     tmp +=
                         $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
-                        $"{"",-46}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n";
+                        $"{"",-46}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n"+
+                        $"{"",-46}RNG: {item.effective_range,5}\n";
 
                 }
             }

@@ -19,7 +19,7 @@ namespace PocketDarkSouls
             bool answer = true;
             if (this.HasSecondWord())
             {
-                player.messenger.ErrorMessage("\nI cannot quit " + this.SecondWord, ConsoleColor.Red);
+                player.Messenger.ErrorMessage("\nI cannot quit " + this.SecondWord, ConsoleColor.Red);
                 answer = false;
             }
             return answer;

@@ -16,17 +16,17 @@ public class SpeakTrade : Speak
     {
         //  p1 = player 
         //  p2 = NPC
-        p1.messenger.WarningMessage($"Trading with : [ {p2.name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
+        p1.Messenger.WarningMessage($"Trading with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
         // needs to hook into p2's interactions menu
         
         
         // menu
         
-        List <Item> forsale  = p2.main_inventory.getAllItemsMarkedForSale();
+        List <Item> forsale  = p2.Inventory.getAllItemsMarkedForSale();
 
         if (forsale.Count > 0)
         {
-            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.TradeSpeach(this.Dialog),ConsoleColor.Magenta);
+            p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.TradeSpeach(this.Dialog),ConsoleColor.Magenta);
             
             
 
@@ -53,7 +53,7 @@ public class SpeakTrade : Speak
 
                     if (result < 0)
                     {
-                        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.QuitTrade(this.Dialog),ConsoleColor.Magenta);
+                        p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.QuitTrade(this.Dialog),ConsoleColor.Magenta);
                         return;
                     }
                 }
@@ -63,37 +63,37 @@ public class SpeakTrade : Speak
                 }
             }
 
-            Item? purchase = p2.main_inventory.getForSaleItem(forsale[option_select].id);
+            Item? purchase = p2.Inventory.getForSaleItem(forsale[option_select].id);
             // handle case where item is no longer for sale
             if (purchase == null)
             {
-                p1.messenger.ReciveMessage(p2.name,"Seems there is nothing available for purchase.", ConsoleColor.Magenta);
+                p1.Messenger.ReciveMessage(p2.Name,"Seems there is nothing available for purchase.", ConsoleColor.Magenta);
                 return;
             }
             // handle cash transaction 
             
-            if (p1.wallet.gold < purchase.price)
+            if (p1.Wallet.gold < purchase.price)
             {
-                p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NotEnoughToTrade(this.Dialog), ConsoleColor.Magenta);
+                p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.NotEnoughToTrade(this.Dialog), ConsoleColor.Magenta);
                 return;
             }
             else
             {
-                p1.wallet.GiveGold(purchase.price);
-                p2.wallet.AddGold(purchase.price);
+                p1.Wallet.GiveGold(purchase.price);
+                p2.Wallet.AddGold(purchase.price);
             }
             // transfer item 
-            p2.main_inventory.SoldItem(purchase.id, 1);
-            p1.main_inventory.AddItem(purchase);
+            p2.Inventory.SoldItem(purchase.id, 1);
+            p1.Inventory.AddItem(purchase);
         }
         else
         {
-            p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.NothingToTradeSpeach(this.Dialog), ConsoleColor.Magenta);
+            p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.NothingToTradeSpeach(this.Dialog), ConsoleColor.Magenta);
             return;
         }
 
 
-        p1.messenger.ReciveMessage(p2.name,p2.dialogHandler.ThankYouSpeach(this.Dialog), ConsoleColor.Magenta);
+        p1.Messenger.ReciveMessage(p2.Name,p2.DialogHandler.ThankYouSpeach(this.Dialog), ConsoleColor.Magenta);
         
     }
 }

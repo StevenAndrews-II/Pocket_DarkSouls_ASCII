@@ -20,7 +20,7 @@ namespace PocketDarkSouls
             
             int count_ = player.CurrentRoom.GetOccupancyCount(); 
             if (count_ < 2){
-                player.messenger.InfoMessage("Talking to yourself is a sure sign of madness, these caverns are listening...", ConsoleColor.Yellow);
+                player.Messenger.InfoMessage("Talking to yourself is a sure sign of madness, these caverns are listening...", ConsoleColor.Yellow);
             }
 
             
@@ -29,17 +29,18 @@ namespace PocketDarkSouls
             {
                 if (this.HasThirdWord())
                 {
-                    Player p2 = player.CurrentRoom.FindPlayerInRoom(this.ThirdWord);
+                    Player? p2 = player.CurrentRoom.FindPlayerInRoom(this.ThirdWord);
                     if (p2 != null)
                     {
-                        if (p2.SpeakCommands.ContainsKey(this.SecondWord))
-                        {
-                            // execute the speak command for the NPC - hook up the speak command to the NPC and execute it here
-                            p2.SpeakCommands[this.SecondWord].Execute(player,p2);
+
+                        Speak? cmd = p2.LookUpSpeakCommand(this.SecondWord);
+
+                        if (cmd != null) {
+                            cmd.Execute(player, p2);
                         }
                         else
                         {
-                            player.messenger.WarningMessage("\nI shouldnt bother them.. ", ConsoleColor.Yellow);
+                            player.Messenger.WarningMessage("\nI shouldnt bother them.. ", ConsoleColor.Yellow);
                         }
                     }
                 }
@@ -47,7 +48,7 @@ namespace PocketDarkSouls
             }
             else
             {
-                player.messenger.WarningMessage("\nSpeek to whom? Youself perhaps? ", ConsoleColor.Yellow);
+                player.Messenger.WarningMessage("\nSpeek to whom? Youself perhaps? ", ConsoleColor.Yellow);
             }
             return false;
         }
