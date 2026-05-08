@@ -74,6 +74,10 @@ namespace PocketDarkSouls
         }
 
 
+        public void WarpOnEnter(Player player_)
+        {
+           // warp on enter 
+        }
 
 
         public int GetOccupancyCount()

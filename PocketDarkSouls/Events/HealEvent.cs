@@ -1,5 +1,5 @@
 ﻿using PocketDarkSouls;
-public class HealEvent
+public sealed class HealEvent
 {
     public int Amount { get; set; }
 

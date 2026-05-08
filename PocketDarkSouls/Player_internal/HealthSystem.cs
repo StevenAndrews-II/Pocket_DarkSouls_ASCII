@@ -38,8 +38,8 @@ public class HealthSystem
         this.events = events;
 
         // Subscribe to events
-        events.subscribeHit(HandleHit);
-        events.subscribeHeal(HandleHeal);
+        events.Subscribe<HitEvent>(HandleHit);
+        events.Subscribe<HealEvent>(HandleHeal);
     }
 
     /// <summary>

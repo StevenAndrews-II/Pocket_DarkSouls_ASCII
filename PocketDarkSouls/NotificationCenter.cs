@@ -10,7 +10,7 @@ namespace PocketDarkSouls
     {
         private Dictionary<String, EventContainer> observers;
         private static NotificationCenter _instance;
-        public static NotificationCenter Instance
+        public static NotificationCenter Instance // Singlton pattern
         {
             get
             {

@@ -1,10 +1,10 @@
 ﻿using PocketDarkSouls;
-public class HitEvent
+public sealed class HitEvent
 {
-    public int Amount { get; set; }
+    public int Damage { get; set; }
 
-    public HitEvent(int amount)
+    public HitEvent(int damage)
     {
-        Amount = amount;
+        Damage = damage;
     }
 }
