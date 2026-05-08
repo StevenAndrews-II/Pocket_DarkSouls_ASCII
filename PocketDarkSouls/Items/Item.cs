@@ -11,4 +11,7 @@ public abstract class Item  // add description
 
 	public abstract override string ToString();
 
+	public abstract override bool Equals(object? obj);
+
+
 }

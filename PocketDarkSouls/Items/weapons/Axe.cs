@@ -1,5 +1,7 @@
 ﻿
 using PocketDarkSouls;
+using System;
+using System.Reflection.PortableExecutable;
 
 public class Axe : Weapon
 {
@@ -37,3 +39,4 @@ public class Axe : Weapon
         return price+ stats;
     }
 }
+

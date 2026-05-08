@@ -63,7 +63,7 @@ public class SpeakTrade : Speak
                 }
             }
 
-            Item? purchase = p2.Inventory.getForSaleItem(forsale[option_select].id);
+            Item? purchase = p2.Inventory.getForSaleItem(forsale[option_select].id); // broken asf<----------------------------------------------------//////
             // handle case where item is no longer for sale
             if (purchase == null)
             {

@@ -16,4 +16,23 @@ public abstract class Weapon : Item
     {
 
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null || obj.GetType() != GetType())
+        {
+            return false;
+        }
+        Weapon other = (Weapon)obj;
+
+        return
+            id == other.id &&
+            mass == other.mass &&
+            numberOf == other.numberOf &&
+            physical_damage == other.physical_damage &&
+            fire_damage == other.fire_damage &&
+            magic_damage == other.magic_damage &&
+            effective_range == other.effective_range;
+    }
+
 }

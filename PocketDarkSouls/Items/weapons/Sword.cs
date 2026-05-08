@@ -25,6 +25,9 @@ public class Sword:Weapon
         // maybe switch to event manager here tho
         // use enemy event manager then send it a hit packet 
     }
+
+   
+
     public override string ToString()
     {
         string price = $"{this.id,-30} >> " +

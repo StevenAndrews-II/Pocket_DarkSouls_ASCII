@@ -19,6 +19,20 @@ public abstract class Potion : Item, IConsumable
 
         Hook(user, amount);
     }
+    public override bool Equals(object? obj)
+    {
+        if (obj == null || obj.GetType() != GetType())
+        {
+            return false;
+        }
+        Potion other = (Potion)obj;
+
+        return
+            id == other.id &&
+            mass == other.mass &&
+            numberOf == other.numberOf &&
+            modifier == other.modifier;
+    }
     /// <summary>
     /// Hooks into the player's stats and modifies them based on the potion's effect. The specific implementation will depend on the type of potion and the desired effect.
     /// </summary>

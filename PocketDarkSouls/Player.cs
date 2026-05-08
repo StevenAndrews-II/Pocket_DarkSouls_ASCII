@@ -148,6 +148,40 @@ namespace PocketDarkSouls
             }
         }
 
+
+        public void DropItemMenu(string key)
+        {
+            bool dropped = false;
+            while (key != null)
+            {
+                Console.WriteLine(Inventory.getItemInfo(key));
+                Console.WriteLine("Input an amount to drop:");
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int amount))
+                {
+                    if (amount <= 0)
+                    {
+                        Console.WriteLine("Canceled...");
+                        break;
+                    }
+                    Item? droppedItem = Inventory.DropItem(key, amount);
+                    if (droppedItem != null)
+                    {
+                        CurrentRoom.AddItemToRoom(droppedItem);
+                        dropped = true;
+                    }
+                    break;
+                }
+                Console.Clear();
+            }
+            if (!dropped)
+            {
+                Messenger.WarningMessage("Item could not be dropped..", ConsoleColor.Red);
+            }
+        }
+
+
+
         //-----------------------------------------------------------------------------------------
         // PLAYER INFO
         //-----------------------------------------------------------------------------------------

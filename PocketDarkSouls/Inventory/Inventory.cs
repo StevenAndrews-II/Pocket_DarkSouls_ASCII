@@ -312,6 +312,7 @@ public class Inventory
         }
     }
 
+
     //-------------------------------------------------------------------------------------------------------
     // Locate
     //-------------------------------------------------------------------------------------------------------
@@ -449,6 +450,56 @@ public class Inventory
     // Inventory managment
     //-------------------------------------------------------------------------------------------------------
 
+    private string GenerateSlot(string id)
+    {
+        int suffix = 1;
+        string newId = $"{id}_{suffix}";
+        while (backpack.ContainsKey(newId))
+        {
+            suffix++;
+            newId = $"{id}_{suffix}";
+        }
+        while (equipment.ContainsKey(newId))
+        {
+            suffix++;
+            newId = $"{id}_{suffix}";
+        }
+        while (forSale.ContainsKey(newId))
+        {
+            suffix++;
+            newId = $"{id}_{suffix}";
+        }
+        while (armor.ContainsKey(newId))
+        {
+            suffix++;
+            newId = $"{id}_{suffix}";
+        }
+        return newId;
+    }
+
+    public Item? DropItem(string id, int amt)
+    {
+        int amt_ = Math.Abs(amt); // user guard
+
+        Item? item_ = null;
+        if (backpack.ContainsKey(id))
+        {
+            item_ = backpack[id];
+            if (backpack[id].numberOf > amt_)
+            {
+                backpack[id].numberOf -= amt_;                                        // remove from inventory 
+                backpack_lbs -= backpack[id].numberOf * backpack[id].mass;   // update mass
+            }
+            else
+            {
+                backpack_lbs -= backpack[id].numberOf * backpack[id].mass;   // update mass
+                backpack.Remove(id);
+            }
+        }
+        return item_; 
+    }
+
+
     /// <summary>
     /// Adds an item to the inventory.
     /// This method checks if adding the specified item would exceed the backpack's weight limit and capacity limit.
@@ -463,19 +514,23 @@ public class Inventory
         {
             if (Capacity_onboard + item.numberOf <= Capacity)
             {
-                if (backpack.ContainsKey(item.id))
+                // check if the same item already exists in the backpack
+                foreach (var (k,v) in backpack)
                 {
-                    Capacity_onboard            += item.numberOf;    // capacity
-                    backpack_lbs                += item_mass;        // add up mass
-                    backpack[item.id].numberOf  += item.numberOf;    // add
-                    return true;
+                    if (v.Equals(item))
+                    {
+                        // same item, add to the stack 
+                        Capacity_onboard     += item.numberOf;    // capacity
+                        backpack_lbs         += item_mass;        // add up mass
+                        backpack[k].numberOf += item.numberOf;    // add
+                        return true;
+                    }
                 }
-                else
-                {
-                    backpack_lbs += item_mass;      // add up mass
-                    backpack.Add(item.id, item);
-                    return true;
-                }
+                // generate
+                backpack_lbs += item_mass;     
+                backpack.Add(GenerateSlot(item.id), item);
+                return true;
+
             }
         }
         return false;

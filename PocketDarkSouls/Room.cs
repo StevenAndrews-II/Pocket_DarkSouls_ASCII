@@ -31,6 +31,8 @@ namespace PocketDarkSouls
 
         public Dictionary<string, Action> Actions { get; private set; }
 
+        private  Dictionary<string,Item> ItemsInRoom = new Dictionary<string, Item>();
+
         public Room() : this("empty", "in","normal", new Dictionary<string, Action>()) {}
         public Room(string tag) : this(tag, "in","normal", new Dictionary<string, Action>()) {}
 
@@ -45,6 +47,97 @@ namespace PocketDarkSouls
             this.Actions    = actions_; // actions 
         }
 
+
+        // ----------------------------------------------------
+        // ITEMS IN ROOM MANAGEMENT
+        // ----------------------------------------------------
+
+        private string GenerateSlot(string id)
+        {
+            int suffix = 1;
+            string newId = $"{id}_{suffix}";
+            while (ItemsInRoom.ContainsKey(newId))
+            {
+                suffix++;
+                newId = $"{id}_{suffix}";
+            }
+            return newId;
+        }
+
+        public void AddItemToRoom(Item item)
+        {
+            if (ItemsInRoom.ContainsKey(item.id))
+            {
+                if (item.Equals(ItemsInRoom[item.id]))
+                {
+                    ItemsInRoom[item.id].numberOf += item.numberOf;
+                }
+                    
+            }
+            else
+            {
+                string newId       = GenerateSlot(item.id);
+                ItemsInRoom[newId] = item;
+            }
+        }
+
+        public void RemoveItemFromRoom(string itemId) // removes a singe item from the room, if there are more than 1 it decreases the quantity by 1
+        {
+            if (ItemsInRoom.ContainsKey(itemId))
+            {
+                if (ItemsInRoom[itemId].numberOf > 1)
+                {
+                    ItemsInRoom[itemId].numberOf--;
+                }
+                else
+                {
+                    ItemsInRoom.Remove(itemId);
+                }
+            }   
+        }
+
+        public void RemoveItemFromRoom(string itemId, int quantity) // removes a specified quantity of the item from the room, if the quantity to remove is greater than the quantity in the room it removes the item entirely
+        {
+            if (ItemsInRoom.ContainsKey(itemId))
+            {
+                if (ItemsInRoom[itemId].numberOf > quantity)
+                {
+                    ItemsInRoom[itemId].numberOf -= quantity;
+                }
+                else
+                {
+                    ItemsInRoom.Remove(itemId);
+                }
+            }
+        }
+
+        public Item? GetItemFromRoom(string itemId) // removes the item from the room and returns it, if the item is not in the room it returns null
+        {
+            if (ItemsInRoom.ContainsKey(itemId))
+            {
+                Item item = ItemsInRoom[itemId];
+                ItemsInRoom.Remove(itemId);
+                return item;
+            }
+            return null;
+        }
+
+
+        public string ShowAllItems()
+        {
+            string itemList = "Items in room:\n";
+            foreach (var item in ItemsInRoom.Values)
+            {
+                itemList += $"- {item.id} x{item.numberOf}\n";
+            }
+            return itemList;
+        }
+
+
+
+        // ----------------------------------------------------
+        // ACTIONS IN ROOM MANAGEMENT
+        // ----------------------------------------------------
 
         public void Set_Actions( string key,  Action action_)
         {
@@ -73,6 +166,10 @@ namespace PocketDarkSouls
             return null;
         }
 
+
+        // ----------------------------------------------
+        // Motion and Room Transition Management
+        // ----------------------------------------------
 
         public void WarpOnEnter(Player player_)
         {
@@ -121,7 +218,9 @@ namespace PocketDarkSouls
             return out_;
         }
 
-
+        // ----------------------------------------------   
+        // Player Information Management
+        // ----------------------------------------------
 
         public List<List<string>> OccupancyToList()
         {
