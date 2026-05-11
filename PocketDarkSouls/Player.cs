@@ -161,7 +161,35 @@ namespace PocketDarkSouls
         }
 
 
-
+        public void CharityMenu(Player p2)
+        {
+            Messenger.WarningMessage($"Speaking with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.Blue);
+            Messenger.ReciveMessage(p2.Name, p2.DialogHandler.GenericSpeach(this.Dialog), ConsoleColor.Magenta);
+            while (true)
+            {
+                Console.WriteLine("Input gold total [ 0 to exit ]: ");
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int result))
+                {
+                    if (result <= 0)
+                    {
+                        Messenger.ReciveMessage(p2.Name, p2.DialogHandler.BadCharity(this.Dialog, 0), ConsoleColor.Magenta);
+                        break;
+                    }
+                    else
+                    {
+                        if (!Wallet.GiveGold(result))
+                        {
+                            Messenger.ErrorMessage("You shouldnt be making enemies here...", ConsoleColor.Red);
+                            Messenger.ReciveMessage(p2.Name, p2.DialogHandler.BadCharity(this.Dialog, 1), ConsoleColor.Magenta);
+                            break;
+                        }
+                        p2.Wallet.AddGold(result);
+                        Messenger.ReciveMessage(p2.Name, p2.DialogHandler.ThankYouSpeach(this.Dialog), ConsoleColor.Magenta);
+                        break;
+                    }
+                }
+            }
 
         /// <summary>
         /// Scavenges the current room, showing description, nearby players, and items in the area.
@@ -510,36 +538,18 @@ namespace PocketDarkSouls
         /// </summary>
         public void GoTo(string direction)
         {
-            if (string.IsNullOrWhiteSpace(direction))
-            {
-                Messenger.ErrorMessage("Go where?", ConsoleColor.Red);
-                return;
-            }
-
-            if (CurrentRoom == null)
-            {
-                Messenger.ErrorMessage("You are not in a room.", ConsoleColor.Red);
-                return;
-            }
-
             Room nextRoom = CurrentRoom.GetExit(direction);
 
             if (nextRoom != null)
             {
-                Room oldRoom = CurrentRoom;
-
-                oldRoom.PlayerHasLeftRoom(this);
-
-                // IMPORTANT:
-                // Set CurrentRoom before entering the room.
-                // This allows warp rooms to override CurrentRoom correctly.
-                CurrentRoom = nextRoom;
-
+                CurrentRoom.PlayerHasLeftRoom(this);
                 nextRoom.PlayerHasEnteredRoom(this);
+                _roomHistory.Push(CurrentRoom);
+                CurrentRoom = nextRoom;
             }
             else
             {
-                Messenger.ErrorMessage("\nThere is no path " + direction, ConsoleColor.Red);
+                Messenger.ErrorMessage("There is no path " + direction, ConsoleColor.Red);
             }
         }
     }
