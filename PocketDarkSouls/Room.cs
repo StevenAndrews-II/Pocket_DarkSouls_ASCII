@@ -52,6 +52,11 @@ namespace PocketDarkSouls
         // ITEMS IN ROOM MANAGEMENT
         // ----------------------------------------------------
 
+        /// <summary>
+        /// Generates a unique slot for an item in the room based on the item's id. If the item id already exists in the room, it appends a suffix to create a new unique id. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private string GenerateSlot(string id)
         {
             int suffix = 1;
@@ -64,23 +69,56 @@ namespace PocketDarkSouls
             return newId;
         }
 
-        public void AddItemToRoom(Item item)
+        /// <summary>
+        /// Adds an item to the room. If the item already exists in the room, it increases the quantity of that item by the specified amount. 
+        /// </summary>
+        /// <param name="item"></param> 
+        /// <param name="amt"></param>
+        public void AddItemToRoom(Item item, int amt)
         {
-            if (ItemsInRoom.ContainsKey(item.id))
+            int amountToAdd = Math.Abs(amt);
+
+            if (item == null || amountToAdd <= 0)
             {
-                if (item.Equals(ItemsInRoom[item.id]))
+                return;
+            }
+
+            foreach (var entry in ItemsInRoom)
+            {
+                Item roomItem = entry.Value;
+
+                if (roomItem.Equals(item))
                 {
-                    ItemsInRoom[item.id].numberOf += item.numberOf;
+                    roomItem.numberOf += amountToAdd;
+                    return;
                 }
-                    
             }
-            else
-            {
-                string newId       = GenerateSlot(item.id);
-                ItemsInRoom[newId] = item;
-            }
+
+            Item newRoomItem = item.CloneWithAmount(amountToAdd);
+            string newId = GenerateSlot(item.id);
+
+            ItemsInRoom[newId] = newRoomItem;
         }
 
+
+        /// <summary>
+        /// Adds an item to the room. If the item already exists in the room, it increases the quantity of that item by 1.
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddItemToRoom(Item item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            AddItemToRoom(item, item.numberOf);
+        }
+
+        /// <summary>
+        /// Removes a single item from the room. If there are more than 1 of that item in the room, it decreases the quantity by 1. 
+        /// </summary>
+        /// <param name="itemId"></param>
         public void RemoveItemFromRoom(string itemId) // removes a singe item from the room, if there are more than 1 it decreases the quantity by 1
         {
             if (ItemsInRoom.ContainsKey(itemId))
@@ -96,6 +134,12 @@ namespace PocketDarkSouls
             }   
         }
 
+        /// <summary>
+        /// Removes a specified quantity of an item from the room, or removes the item entirely if the quantity to
+        /// remove is greater than or equal to the quantity present.
+        /// </summary>
+        /// <param name="itemId">The unique identifier of the item to remove.</param>
+        /// <param name="quantity">The number of items to remove from the room.</param>
         public void RemoveItemFromRoom(string itemId, int quantity) // removes a specified quantity of the item from the room, if the quantity to remove is greater than the quantity in the room it removes the item entirely
         {
             if (ItemsInRoom.ContainsKey(itemId))
@@ -111,6 +155,11 @@ namespace PocketDarkSouls
             }
         }
 
+        /// <summary>
+        /// Removes and returns the item with the specified ID from the room.
+        /// </summary>
+        /// <param name="itemId">The unique identifier of the item to retrieve.</param>
+        /// <returns>The item if found and removed; otherwise, null.</returns>
         public Item? GetItemFromRoom(string itemId) // removes the item from the room and returns it, if the item is not in the room it returns null
         {
             if (ItemsInRoom.ContainsKey(itemId))
@@ -123,13 +172,27 @@ namespace PocketDarkSouls
         }
 
 
+        /// <summary>
+        /// Show all items in the room. If there are no items, it indicates that the room is empty. Otherwise, it lists each item along with its unique key, id, and quantity.
+        /// </summary>
+        /// <returns></returns>
         public string ShowAllItems()
         {
-            string itemList = "Items in room:\n";
-            foreach (var item in ItemsInRoom.Values)
+            if (ItemsInRoom.Count == 0)
             {
-                itemList += $"- {item.id} x{item.numberOf}\n";
+                return "Items in room:\n- None\n";
             }
+
+            string itemList = "Items in room:\n";
+
+            foreach (var entry in ItemsInRoom)
+            {
+                string itemKey = entry.Key;
+                Item item = entry.Value;
+
+                itemList += $"- {itemKey} : {item.id} x{item.numberOf}\n";
+            }
+
             return itemList;
         }
 
@@ -138,7 +201,7 @@ namespace PocketDarkSouls
         // ----------------------------------------------------
         // ACTIONS IN ROOM MANAGEMENT
         // ----------------------------------------------------
-
+        // Actions are things that can be done in the room, they are not necessarily tied to items, they can be things like "look around" or "rest"
         public void Set_Actions( string key,  Action action_)
         {
             Actions.Add(key, action_);

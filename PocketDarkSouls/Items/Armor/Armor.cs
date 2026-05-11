@@ -18,7 +18,6 @@ public abstract class Armor : Item
         return
             id == other.id &&
             mass == other.mass &&
-            numberOf == other.numberOf &&
             physical_protection == other.physical_protection &&
             magic_protection == other.magic_protection &&
             fire_protection == other.fire_protection;

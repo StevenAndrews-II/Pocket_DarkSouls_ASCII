@@ -28,7 +28,6 @@ public abstract class Weapon : Item
         return
             id == other.id &&
             mass == other.mass &&
-            numberOf == other.numberOf &&
             physical_damage == other.physical_damage &&
             fire_damage == other.fire_damage &&
             magic_damage == other.magic_damage &&

@@ -10,7 +10,6 @@ namespace PocketDarkSouls
             Game game = new Game();
             game.Start();
             game.Play();
-            game.End();
         }
     }
 }

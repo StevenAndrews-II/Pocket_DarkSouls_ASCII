@@ -13,5 +13,10 @@ public abstract class Item  // add description
 
 	public abstract override bool Equals(object? obj);
 
-
+    public virtual Item CloneWithAmount(int amount)
+    {
+        Item copy = (Item)this.MemberwiseClone();
+        copy.numberOf = amount;
+        return copy;
+    }
 }

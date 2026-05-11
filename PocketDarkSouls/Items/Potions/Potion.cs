@@ -30,7 +30,6 @@ public abstract class Potion : Item, IConsumable
         return
             id == other.id &&
             mass == other.mass &&
-            numberOf == other.numberOf &&
             modifier == other.modifier;
     }
     /// <summary>

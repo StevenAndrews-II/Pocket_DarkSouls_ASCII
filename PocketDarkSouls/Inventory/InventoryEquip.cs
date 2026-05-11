@@ -8,10 +8,7 @@ public class InventoryEquip : ICs
     {
         if (key != null)
         {
-            bool check = p1.Inventory.Equip(key);
-            if (!check) {
-                p1.Messenger.ErrorMessage("Not equipable...", ConsoleColor.Red);
-            }
+            p1.EquipItem(key);
         }
         else
         {

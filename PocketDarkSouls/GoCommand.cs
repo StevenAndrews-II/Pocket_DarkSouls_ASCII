@@ -16,7 +16,7 @@ namespace PocketDarkSouls
         public bool Execute(Player player)
         {
             if (this.HasSecondWord())
-            {
+            {   
                 player.GoTo(this.SecondWord);
             }
             else

@@ -48,9 +48,6 @@ public class Inventory
     private const double LIMIT_equipment    = 70;
 
 
-    //private readonly Wallet         wallet;
-    //private readonly HealthSystem   HP;
-
     private readonly Player Player;
 
     public Inventory(Player Player,double backpack_cap = 75 ,double equipment_cap = 25,double armor_cap = 25)
@@ -293,7 +290,11 @@ public class Inventory
         }
     }
 
-
+    /// <summary>
+    /// Solds a specified amount of an item from the for sale bag based on the item ID and the amount sold.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="amt"></param>
     public void SoldItem(string id, int amt)
     {
         int amt_ = Math.Abs(amt); // user guard
@@ -451,54 +452,77 @@ public class Inventory
     //-------------------------------------------------------------------------------------------------------
     // Inventory managment
     //-------------------------------------------------------------------------------------------------------
-
+    /// <summary>
+    /// Generates a unique slot ID for an item based on the specified item ID.
+    /// This method checks if the generated slot ID already exists in the backpack, equipment, for sale, or armor dictionaries. 
+    /// If it does, it increments a slot tag until it finds a unique slot ID that does not exist in any of the dictionaries. 
+    /// The method then returns the unique slot ID for the item to be added to the inventory.
+    /// </summary>
+    /// <param name="id">The base ID of the item for which to generate a unique slot ID.</param>
+    /// <returns>A unique slot ID for the item.</returns>
     private string GenerateSlot(string id)
     {
-        int suffix = 1;
-        string newId = $"{id}_{suffix}";
+        int slotTag = 1;
+        string newId = $"{id}_{slotTag}";
         while (backpack.ContainsKey(newId))
         {
-            suffix++;
-            newId = $"{id}_{suffix}";
+            slotTag++;
+            newId = $"{id}_{slotTag}";
         }
         while (equipment.ContainsKey(newId))
         {
-            suffix++;
-            newId = $"{id}_{suffix}";
+            slotTag++;
+            newId = $"{id}_{slotTag}";
         }
         while (forSale.ContainsKey(newId))
         {
-            suffix++;
-            newId = $"{id}_{suffix}";
+            slotTag++;
+            newId = $"{id}_{slotTag}";
         }
         while (armor.ContainsKey(newId))
         {
-            suffix++;
-            newId = $"{id}_{suffix}";
+            slotTag++;
+            newId = $"{id}_{slotTag}";
         }
         return newId;
     }
 
+    /// <summary>
+    /// Drops a specified amount of an item from the inventory based on the item ID and the amount to drop. 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="amt"></param>
+    /// <returns></returns>
     public Item? DropItem(string id, int amt)
     {
-        int amt_ = Math.Abs(amt); // user guard
+        int amountToDrop = Math.Abs(amt);
 
-        Item? item_ = null;
-        if (backpack.ContainsKey(id))
+        if (amountToDrop <= 0)
         {
-            item_ = backpack[id];
-            if (backpack[id].numberOf > amt_)
-            {
-                backpack[id].numberOf -= amt_;                                        // remove from inventory 
-                backpack_lbs -= backpack[id].numberOf * backpack[id].mass;   // update mass
-            }
-            else
-            {
-                backpack_lbs -= backpack[id].numberOf * backpack[id].mass;   // update mass
-                backpack.Remove(id);
-            }
+            return null;
         }
-        return item_; 
+
+        if (!backpack.ContainsKey(id))
+        {
+            return null;
+        }
+
+        Item originalItem           = backpack[id];
+
+        int actualDropAmount        = Math.Min(amountToDrop, originalItem.numberOf);
+
+        Item droppedItem            = originalItem.CloneWithAmount(actualDropAmount);
+
+        originalItem.numberOf       -= actualDropAmount;
+        backpack_lbs                -= actualDropAmount * originalItem.mass;
+        Capacity_onboard            -= actualDropAmount;
+
+        if (originalItem.numberOf <= 0)
+        {
+            backpack.Remove(id);
+        }
+
+        return droppedItem;
     }
 
 

@@ -41,7 +41,7 @@ namespace PocketDarkSouls
 
         public bool HasForthWord()
         {
-            return this.ThirdWord != null;
+            return this.ForthWord != null;
         }
 
         public abstract bool Execute(Player player);

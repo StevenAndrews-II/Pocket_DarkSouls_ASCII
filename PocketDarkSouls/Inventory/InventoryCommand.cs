@@ -20,7 +20,7 @@ namespace PocketDarkSouls
             ["equip"]           = new InventoryEquip(),
             ["unequip"]         = new InventoryUnequip(),
             ["use"]             = new InventoryUse(),
-            //["drop"]          = new InventoryDrop(),
+            ["drop"]            = new InventoryDrop(),
             //["markforsale"]   = new InventoryMarkForSale(),
             //["unmarkforsale"] = new InventoryUnMarkForSale(),
         };

@@ -12,6 +12,7 @@ namespace PocketDarkSouls
 
         public Room CurrentRoom { get; private set; }
 
+        private Stack<Room> _roomHistory = new Stack<Room>();
 
         public string Name { get; }
 
@@ -113,6 +114,185 @@ namespace PocketDarkSouls
         // ITEM SYSTEM
         //-----------------------------------------------------------------------------------------
 
+
+
+        /// <summary>
+        /// Drops an item from the player's inventory into the current room. Validates input and provides feedback.
+        /// </summary>
+        /// <param name="itemKey"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public bool DropInventoryItem(string itemKey, int amount = 1)
+        {
+            if (string.IsNullOrWhiteSpace(itemKey))
+            {
+                Messenger.ErrorMessage("What should I drop?...", ConsoleColor.Red);
+                return false;
+            } 
+
+            if (amount <= 0)
+            { 
+                Messenger.ErrorMessage("Drop amount must be greater than 0...", ConsoleColor.Red);
+                return false;
+            }
+
+            if (CurrentRoom == null)
+            { 
+                Messenger.ErrorMessage("You are not in a room...", ConsoleColor.Red);
+                return false;  
+            }
+
+            Item? droppedItem = Inventory.DropItem(itemKey, amount);
+
+            if (droppedItem == null)
+            {
+                Messenger.ErrorMessage("You do not have that item...", ConsoleColor.Red);
+                return false;
+            }
+
+            CurrentRoom.AddItemToRoom(droppedItem);
+
+            Messenger.InfoMessage(
+                $"Dropped {droppedItem.id} x{droppedItem.numberOf}.",
+                ConsoleColor.Green
+            );
+
+            return true;
+        }
+
+
+
+
+        /// <summary>
+        /// Scavenges the current room, showing description, nearby players, and items in the area.
+        /// Provides contextual information for the player to make informed decisions.
+        /// </summary>
+        public void ScavengeCurrentRoom()
+        {
+            if (CurrentRoom == null)
+            {
+                Messenger.ErrorMessage("You are not in a room...", ConsoleColor.Red);
+                return;
+            }
+
+            Messenger.InfoMessage("\nYou scavenge the area...", ConsoleColor.Yellow);
+
+            Messenger.InfoMessage("\n" + CurrentRoom.Description(), ConsoleColor.White);
+
+            string nearbyPlayers = CurrentRoom.GetNearByPlayers(Name);
+
+            if (!string.IsNullOrWhiteSpace(nearbyPlayers))
+            {
+                Messenger.InfoMessage("\n" + nearbyPlayers, ConsoleColor.Gray);
+            }
+
+            Messenger.InfoMessage("\n" + CurrentRoom.ShowAllItems(), ConsoleColor.Green);
+        }
+
+
+
+        /// <summary>
+        /// Equips an item from the inventory if possible. Validates input and provides feedback on success or failure.
+        /// </summary>
+        /// <param name="itemKey"></param>
+        /// <returns></returns>
+        public bool EquipItem(string itemKey)
+        {
+            if (string.IsNullOrWhiteSpace(itemKey))
+            {
+                Messenger.ErrorMessage("What should I equip?", ConsoleColor.Red);
+                return false;
+            }
+
+            bool wasEquipped = Inventory.Equip(itemKey);
+
+            if (wasEquipped)
+            {
+                Messenger.InfoMessage($"Equipped {itemKey}.", ConsoleColor.Green);
+            }
+            else
+            {
+                Messenger.ErrorMessage("Not equipable...", ConsoleColor.Red);
+            }
+
+            return wasEquipped;
+        }
+
+
+
+        /// <summary>
+        ///  unequips an item from the inventory if possible. Validates input and provides feedback on success or failure.
+        /// </summary>
+        /// <param name="itemKey"></param>
+        /// <returns></returns>
+        public bool UnequipItem(string itemKey)
+        {
+            if (string.IsNullOrWhiteSpace(itemKey))
+            {
+                Messenger.ErrorMessage("What should I unequip?", ConsoleColor.Red);
+                return false;
+            }
+
+            bool wasUnequipped = Inventory.Unequip(itemKey);
+
+            if (wasUnequipped)
+            {
+                Messenger.InfoMessage($"Unequipped {itemKey}.", ConsoleColor.Green);
+            }
+            else
+            {
+                Messenger.ErrorMessage("Could not unequip that item...", ConsoleColor.Red);
+            }
+
+            return wasUnequipped;
+        }
+
+
+        /// <summary>
+        /// Picks up an item from the current room and adds it to the inventory if possible. Validates input and provides feedback on success or failure.
+        /// </summary>
+        /// <param name="itemId"></param>
+        public void PickupItem(string itemId)
+        {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                Messenger.ErrorMessage("Pickup what?", ConsoleColor.Red);
+                return;
+            }
+
+            if (CurrentRoom == null)
+            {
+                Messenger.ErrorMessage("You are not in a room...", ConsoleColor.Red);
+                return;
+            }
+
+            Item? item = CurrentRoom.GetItemFromRoom(itemId);
+
+            if (item == null)
+            {
+                Messenger.ErrorMessage("That item is not in this room...", ConsoleColor.Red);
+                return;
+            }
+
+            bool added = Inventory.AddItem(item);
+
+            if (added)
+            {
+                Messenger.InfoMessage($"Picked up {item.id} x{item.numberOf}.", ConsoleColor.Green);
+            }
+            else
+            {
+                CurrentRoom.AddItemToRoom(item);
+                Messenger.ErrorMessage("You cannot carry that item....", ConsoleColor.Red);
+            }
+        }
+
+        /// <summary>
+        /// Trades with another player, showing their items for sale and allowing the player to select one to purchase. Validates input and provides feedback throughout the process.
+        /// </summary>
+        /// <param name="p2">The player to trade with.</param>
+        /// <param name="Dialog">The dialog options for the trade.</param>
+        /// <returns>The key of the selected item, or null if no item was selected.</returns>
         public string? TradeMenu(Player p2, Dictionary<string, List<string>> Dialog)
         {
             Messenger.WarningMessage($"Trading with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
@@ -163,6 +343,14 @@ namespace PocketDarkSouls
                 return selected;
         }
 
+
+        /// <summary>
+        /// Purchases an item from another player if it is still for sale and the player has enough gold.
+        /// Handles the transaction and item transfer, providing feedback on success or failure.
+        /// </summary>
+        /// <param name="p2">The player to purchase the item from.</param>
+        /// <param name="Dialog">The dialog options for the trade.</param>
+        /// <param name="selected">The key of the selected item.        </param>
         public void PurchaseItem(Player p2, Dictionary<string, List<string>> Dialog, string? selected)
         {
             Item? purchase = p2.Inventory.getForSaleItem(selected); // broken asf<----------------------------------------------------//////
@@ -180,12 +368,12 @@ namespace PocketDarkSouls
                 return;
             }
             else
-            {
+            { 
                 Wallet.GiveGold(purchase.price);
-                p2.Wallet.AddGold(purchase.price);
+                p2.Wallet.AddGold(purchase.price); 
             }
-            // transfer item 
-            p2.Inventory.SoldItem(purchase.id, 1);
+            // transfer 
+            p2.Inventory.SoldItem(purchase.id, 1); 
             Inventory.AddItem(purchase);
 
             Messenger.ReciveMessage(p2.Name, p2.DialogHandler.ThankYouSpeach(Dialog), ConsoleColor.Magenta);
@@ -227,7 +415,10 @@ namespace PocketDarkSouls
             }
         }
 
-
+        /// <summary>
+        /// Drop item menu with console input. Validates input and provides feedback on success or failure. Adds dropped item to current room if successful.
+        /// </summary>
+        /// <param name="key"></param>
         public void DropItemMenu(string key)
         {
             bool dropped = false;
@@ -299,6 +490,22 @@ namespace PocketDarkSouls
         }
 
         /// <summary>
+        /// Go back to the previous room if there is one in the history stack. Provides feedback if there is nowhere to go back to.
+        /// </summary>
+        public void GoBack()
+        {
+            if (_roomHistory.Count == 0)
+            {
+                Messenger.InfoMessage("There is nowhere to go back to.", ConsoleColor.Blue);
+                return;
+            }
+
+            Room previousRoom = _roomHistory.Pop();
+            SpawnWarp(previousRoom);
+        }
+
+
+        /// <summary>
         /// Moves player through a directional exit if available.
         /// </summary>
         public void GoTo(string direction)
@@ -309,6 +516,7 @@ namespace PocketDarkSouls
             {
                 CurrentRoom.PlayerHasLeftRoom(this);
                 nextRoom.PlayerHasEnteredRoom(this);
+                _roomHistory.Push(CurrentRoom);
                 CurrentRoom = nextRoom;
             }
             else
