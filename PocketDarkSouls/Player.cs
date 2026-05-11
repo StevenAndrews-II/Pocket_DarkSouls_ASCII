@@ -510,18 +510,36 @@ namespace PocketDarkSouls
         /// </summary>
         public void GoTo(string direction)
         {
+            if (string.IsNullOrWhiteSpace(direction))
+            {
+                Messenger.ErrorMessage("Go where?", ConsoleColor.Red);
+                return;
+            }
+
+            if (CurrentRoom == null)
+            {
+                Messenger.ErrorMessage("You are not in a room.", ConsoleColor.Red);
+                return;
+            }
+
             Room nextRoom = CurrentRoom.GetExit(direction);
 
             if (nextRoom != null)
             {
-                CurrentRoom.PlayerHasLeftRoom(this);
-                nextRoom.PlayerHasEnteredRoom(this);
-                _roomHistory.Push(CurrentRoom);
+                Room oldRoom = CurrentRoom;
+
+                oldRoom.PlayerHasLeftRoom(this);
+
+                // IMPORTANT:
+                // Set CurrentRoom before entering the room.
+                // This allows warp rooms to override CurrentRoom correctly.
                 CurrentRoom = nextRoom;
+
+                nextRoom.PlayerHasEnteredRoom(this);
             }
             else
             {
-                Messenger.ErrorMessage("There is no path " + direction, ConsoleColor.Red);
+                Messenger.ErrorMessage("\nThere is no path " + direction, ConsoleColor.Red);
             }
         }
     }

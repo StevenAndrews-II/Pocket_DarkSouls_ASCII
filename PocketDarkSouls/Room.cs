@@ -20,6 +20,10 @@ namespace PocketDarkSouls
         private string _tag;
         private string _conjunction;
 
+        private bool isWarpRoom = false;
+        private bool hasWarpedPlayer = false;
+        private Room warpTarget = null;
+
         private  Dictionary<string, Player> players_in_room = new Dictionary<string, Player>();
          
         private bool WiningRoom = false;
@@ -213,6 +217,7 @@ namespace PocketDarkSouls
         public void PlayerHasEnteredRoom(Player player_)
         {
             players_in_room.Add(player_.Name, player_);
+            TryWarp(player_);
         }
 
         public void PlayerHasLeftRoom(Player player_)
@@ -243,10 +248,46 @@ namespace PocketDarkSouls
         // Motion and Room Transition Management
         // ----------------------------------------------
 
-        public void WarpOnEnter(Player player_)
+        public void MakeWarpRoom(Room targetRoom)
         {
-           // warp on enter 
+            isWarpRoom = true;
+            warpTarget = targetRoom;
         }
+
+        public bool IsWarpRoom()
+        {
+            return isWarpRoom;
+        }
+
+        public void TryWarp(Player player)
+        {
+            if (!isWarpRoom)
+            {
+                return;
+            }
+
+            // Prevents infinite warp loops.
+            if (hasWarpedPlayer)
+            {
+                return;
+            }
+
+            if (warpTarget == null)
+            {
+                player.Messenger.ErrorMessage("The warp magic fizzles out...", ConsoleColor.Red);
+                return;
+            }
+
+            hasWarpedPlayer = true;
+
+            player.Messenger.InfoMessage(
+                "The room twists around you. A dark portal pulls you somewhere else!",
+                ConsoleColor.DarkMagenta
+            );
+
+            player.SpawnWarp(warpTarget);
+        }
+
 
 
         public int GetOccupancyCount()

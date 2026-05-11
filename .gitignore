@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PocketDarkSouls/Inventory/InventoryDrop.cs
+/PocketDarkSouls/Inventory/ScavengeCommand.cs
+/PocketDarkSouls/BackCommand.cs
+/PocketDarkSouls/GameManager.cs
+/PocketDarkSouls/PickupCommand.cs

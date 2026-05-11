@@ -227,7 +227,7 @@ public class MapGenerator
 
 
 
-    public Room Generate(int levels = 10, int sprawl = 40,int NPCnumber = 200)
+    public Room Generate(int levels = 10, int sprawl = 20,int NPCnumber = 200)
     {
         LEVELS          = levels; // update the levels number 
         rooms_cache     = new Dictionary<int, Dictionary<int,Room>>();
@@ -298,11 +298,20 @@ public class MapGenerator
                 b.SetExit("down", a);
             }
 
-            if (levels_ == LEVELS-1) // Final boss battle - win condition
+            // Add one optional warp room per level.
+            // It is connected as a side room, so it will not block normal progression.
+            Room warpParent = GetRandomRoomByLevel(levels_);
+            Room warpTarget = GetRandomRoomByLevel(levels_);
+
+            if (warpParent != null && warpTarget != null && warpParent != warpTarget)
             {
-                Room boss = GetRandomBossByLevel(levels_);
-                boss.SetWinCondition(); 
+                AddOptionalWarpRoom(warpParent, warpTarget, levels_);
             }
+            //if (levels_ == LEVELS-1) // Final boss battle - win condition
+            //{
+            //    Room boss = GetRandomBossByLevel(levels_);
+            //    boss.SetWinCondition(); 
+            //}
 
 
         }
@@ -404,7 +413,29 @@ public class MapGenerator
         return null;
     }
 
+    private void AddOptionalWarpRoom(Room parentRoom, Room warpTarget, int level)
+    {
+        if (parentRoom == null || warpTarget == null)
+        {
+            return;
+        }
 
+        Room warpRoom = new Room(
+            $"level{level} : optional warp shrine",
+            "in",
+            "warp",
+            new Dictionary<string, Action>()
+        );
+
+        warpRoom.MakeWarpRoom(warpTarget);
+
+        // This makes the warp room optional.
+        // The main path is NOT blocked because this is just a side exit.
+        parentRoom.SetExit("warp", warpRoom);
+
+        // The warp room only has one normal connection back.
+        warpRoom.SetExit("back", parentRoom);
+    }
 
     private string GetRandomDirection()
     {
