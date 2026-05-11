@@ -353,7 +353,7 @@ namespace PocketDarkSouls
         /// <param name="selected">The key of the selected item.        </param>
         public void PurchaseItem(Player p2, Dictionary<string, List<string>> Dialog, string? selected)
         {
-            Item? purchase = p2.Inventory.getForSaleItem(selected); // broken asf<----------------------------------------------------//////
+            Item? purchase = p2.Inventory.getForSaleItem(selected);
             // handle case where item is no longer for sale
             if (purchase == null)
             {

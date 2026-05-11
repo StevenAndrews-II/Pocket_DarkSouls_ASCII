@@ -22,6 +22,7 @@ namespace PocketDarkSouls
 
         private  Dictionary<string, Player> players_in_room = new Dictionary<string, Player>();
          
+        private bool WiningRoom = false;
 
         public string Tag { get { return _tag; } set { _tag = value; } }
         public string Conjunction { get { return _conjunction; } set { _conjunction = value; } }
@@ -227,6 +228,14 @@ namespace PocketDarkSouls
                 return players_in_room[id];
             }
             return null;
+        }
+
+        public void SetWinCondition()
+        {
+            if (type == "boss")
+            {
+                WiningRoom = true;
+            }
         }
 
 
