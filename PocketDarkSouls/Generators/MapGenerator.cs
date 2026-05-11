@@ -188,6 +188,19 @@ public class MapGenerator
         return list;
     }
 
+
+    public List<Room> GetBossAtLevel(int level)
+    {
+        List<Room> list = new List<Room>();
+        foreach (var (k, v) in boss_rooms_cache[level])
+        {
+            list.Add(v);
+        }
+        return list;
+    }
+
+
+
     public List<Room> GetMinesAtLevel(int level)
     {
         List<Room> list = new List<Room>();
@@ -285,6 +298,12 @@ public class MapGenerator
                 b.SetExit("down", a);
             }
 
+            if (levels_ == LEVELS-1) // Final boss battle - win condition
+            {
+                Room boss = GetRandomBossByLevel(levels_);
+                boss.SetWinCondition(); 
+            }
+
 
         }
         PopulateNPCs(NPCnumber);
@@ -368,6 +387,19 @@ public class MapGenerator
                 if (index-- == 0)
                     return room;
            
+        }
+        return null;
+    }
+
+    public Room GetRandomBossByLevel(int level)
+    {
+        int index = rand.Next(boss_rooms_cache[level].Count);
+        foreach (var room in boss_rooms_cache[level].Values)
+        {
+
+            if (index-- == 0)
+                return room;
+
         }
         return null;
     }
