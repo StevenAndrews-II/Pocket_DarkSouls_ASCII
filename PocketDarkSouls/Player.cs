@@ -113,6 +113,85 @@ namespace PocketDarkSouls
         // ITEM SYSTEM
         //-----------------------------------------------------------------------------------------
 
+        public string? TradeMenu(Player p2, Dictionary<string, List<string>> Dialog)
+        {
+            Messenger.WarningMessage($"Trading with : [ {p2.Name} : {p2.GetType()} ] ", ConsoleColor.Yellow);
+
+            Dictionary<string, Item> forsale = p2.Inventory.getAllItemsMarkedForSale();
+            string selected = null;
+            if (forsale.Count > 0)
+            {
+                Messenger.ReciveMessage(p2.Name, p2.DialogHandler.TradeSpeach(Dialog), ConsoleColor.Magenta);
+
+                while (selected is null)
+                {
+                    Console.WriteLine("------------------------------------[ Trade Menu ]------------------------------------", ConsoleColor.White);
+
+                    foreach (var (k, v) in forsale)//(int i = 0; i < forsale.Count; i++)
+                    {
+                        Console.WriteLine($"{k,-35}  >> ", ConsoleColor.White);
+                        Console.WriteLine(v.ToString(), ConsoleColor.White);                   // use abstract ovveride of ToString 
+                    }
+
+                    Console.WriteLine($"Selected : ", ConsoleColor.Yellow);
+                    string input = Console.ReadLine();
+
+                    if (input == null || input.ToLower() == "exit")
+                    {
+                        Messenger.ReciveMessage(p2.Name, p2.DialogHandler.QuitTrade(Dialog), ConsoleColor.Magenta);
+                        break;
+                    }
+
+                    if (forsale.ContainsKey(input))
+                    {
+                        Console.WriteLine($"Selected:  {input}", ConsoleColor.Yellow);
+                        selected = input;
+                        break;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Not Found:  {input}", ConsoleColor.Red);
+                    }
+                }
+
+            }
+            else
+            {
+                Messenger.ReciveMessage(p2.Name, p2.DialogHandler.NotEnoughToTrade(Dialog), ConsoleColor.Magenta);
+            }
+                return selected;
+        }
+
+        public void PurchaseItem(Player p2, Dictionary<string, List<string>> Dialog, string? selected)
+        {
+            Item? purchase = p2.Inventory.getForSaleItem(selected); // broken asf<----------------------------------------------------//////
+            // handle case where item is no longer for sale
+            if (purchase == null)
+            {
+                Messenger.ReciveMessage(p2.Name, "Seems there is nothing available for purchase.", ConsoleColor.Magenta);
+                return;
+            }
+            // handle cash transaction 
+
+            if (Wallet.gold < purchase.price)
+            {
+                Messenger.ReciveMessage(p2.Name, p2.DialogHandler.NotEnoughToTrade(Dialog), ConsoleColor.Magenta);
+                return;
+            }
+            else
+            {
+                Wallet.GiveGold(purchase.price);
+                p2.Wallet.AddGold(purchase.price);
+            }
+            // transfer item 
+            p2.Inventory.SoldItem(purchase.id, 1);
+            Inventory.AddItem(purchase);
+
+            Messenger.ReciveMessage(p2.Name, p2.DialogHandler.ThankYouSpeach(Dialog), ConsoleColor.Magenta);
+        }
+   
+
         /// <summary>
         /// Simple console-based item usage menu.
         /// </summary>

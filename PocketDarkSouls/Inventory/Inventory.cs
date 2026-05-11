@@ -343,12 +343,14 @@ public class Inventory
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Item? getForSaleItem(string id)
+    public Item? getForSaleItem(string? id)
     {
-
-        if (forSale.ContainsKey(id))
+        if (id != null)
         {
-            return forSale[id];
+            if (forSale.ContainsKey(id))
+            {
+                return forSale[id];
+            }
         }
         return null;
     }
