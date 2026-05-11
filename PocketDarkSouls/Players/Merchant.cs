@@ -39,7 +39,7 @@ public class Merchant : Player
     private void InventoryFlipping()
     {
         // get 5 items ( if we have em, and list them for sale 
-        List<Item> forsale = Inventory.getAllItemsMarkedForSale();
+        Dictionary<string, Item> forsale = Inventory.getAllItemsMarkedForSale();
 
         if (forsale.Count == 0)
         {

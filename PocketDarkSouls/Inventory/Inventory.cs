@@ -233,12 +233,12 @@ public class Inventory
     /// This method iterates through the forSale dictionary and collects all the items into a list, which is then returned to the caller.
     /// </summary>
     /// <returns>A list of items currently marked for sale.</returns>
-    public List<Item> getAllItemsMarkedForSale()
+    public Dictionary<string, Item> getAllItemsMarkedForSale()
     {
-        List<Item> __ = new List<Item>();
+        Dictionary<string,Item> __ = new Dictionary<string, Item>();
         foreach (var (k, v) in forSale)
         {
-           __.Add(v);
+           __.Add(k,v);
         }
        return __;
     }
@@ -594,33 +594,37 @@ public class Inventory
             if (armor.Count > 0)
             {
                 tmp += "[ Armor ]---------------------------------------------------------------------\n";
-                foreach (Armor item in armor.Values)
+                foreach (var entry in armor)
                 {
+                    // Explicitly cast the value to Armor
+                    Armor item = (Armor)entry.Value;
+
                     tmp +=
-                            $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
-                            $"{"",-46}PHY: {item.physical_protection,5} | FIR: {item.fire_protection,5} | MGK: {item.magic_protection,5}\n";
+                        $"{entry.Key,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
+                        $"{"",-46}PHY: {item.physical_protection,5} | FIR: {item.fire_protection,5} | MGK: {item.magic_protection,5}\n";
                 }
             }
             if (equipment.Count > 0)
             {
                 tmp += "[ Equipment ]------------------------------------------------------------------\n";
-                foreach (Weapon item in equipment.Values)
+                foreach (var entry in equipment)
                 {
+                    // Explicitly cast the value to Armor
+                    Weapon item = (Weapon)entry.Value;
 
                     tmp +=
-                        $"{item.id,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
-                        $"{"",-46}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n"+
+                        $"{entry.Key,-45} >>>   #: {item.numberOf,3}  | Weight: {(item.mass * item.numberOf),8:F2} lbs\n" +
+                        $"{"",-46}PHY: {item.physical_damage,5} | FIR: {item.fire_damage,5} | MGK: {item.magic_damage,5}\n" +
                         $"{"",-46}RNG: {item.effective_range,5}\n";
-
                 }
+
             }
             if (backpack.Count > 0)
             {
                 tmp += "[ Inventory ]------------------------------------------------------------------\n";
-
-                foreach (var item in backpack.Values)
+                foreach (var (k,v) in backpack)
                 {
-                    tmp += $"{item.id,-46} >>> #: {item.numberOf,3} [Weight: {(item.mass * item.numberOf),8:F2}] lbs\n";
+                    tmp += $"{k,-46} >>> #: {v.numberOf,3} [Weight: {(v.mass * v.numberOf),8:F2}] lbs\n";
                 }
             }
             return tmp;

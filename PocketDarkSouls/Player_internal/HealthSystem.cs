@@ -59,7 +59,6 @@ public class HealthSystem
     /// <param name="e">The HitEvent containing the amount of damage to be applied.</param>
     private void HandleHit(HitEvent e)
     {
-        // optional: apply defense logic here
         int damage = e.Amount - physical_defense;
         if (damage < 0) damage = 0;
 
